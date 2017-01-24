@@ -68,14 +68,66 @@ module.exports = {
 
 
 
-           const result = yield col.insertOne({email: objParams.email, password: objParams.password, activateEmail: false, activateToken: objParams.activateToken});
+
+            if (objParams.role == 'individual') {
+
+
+                const result = yield col.insertOne({
+
+
+                    email: objParams.email,
+
+                    password: objParams.password,
+                    activateEmail: false,
+                    activateToken: objParams.activateToken,
+                    role: objParams.role,
+                    createAt: objParams.createAt,
 
 
 
-            db.close();
+                });
+
+                db.close();
 
 
-           return result;
+                return result;
+
+
+
+
+            } else {
+
+                const result = yield col.insertOne({
+
+
+                    email: objParams.email,
+
+                    password: objParams.password,
+                    activateEmail: false,
+                    activateToken: objParams.activateToken,
+                    role: objParams.role,
+                    createAt: objParams.createAt,
+                    nameOfCompany: objParams.nameOfCompany,
+                    addressOfmonitor: objParams.addressOfmonitor,
+                    numberOfBankCard: objParams.numberOfBankCard
+
+
+
+                });
+
+                db.close();
+
+
+                return result;
+
+
+
+
+            }
+
+
+
+
 
 
 

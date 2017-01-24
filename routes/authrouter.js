@@ -66,7 +66,11 @@ function checkRegisterData(req, res) {
             subject: "Активация почтового ящика",
             from: "info@efflife.kz",
             pathToEmailTemplate: "activateEmail.html",
-            date: Date.now()
+            createAt: new Date(),
+            role: req.body.role,
+            nameOfCompany: req.body.nameOfCompany,
+            addressOfmonitor: req.body.addressOfMonitor,
+            numberOfBankCard: req.body.numberOfBankCard
 
 
         };
@@ -161,7 +165,7 @@ router.use(function (req, res, next) {
  * Для отражения CSRF атак.
  */
 
-let tokencsrf = null;
+let tokencsrf = "e2958130-bd51-4ec1-8523-e4a33f3fc024";
 
 router.get('/getcsrftoken', function(req, res, next){
     tokencsrf = uuidV4();
@@ -211,11 +215,6 @@ router.post('/register', function (req, res, next) {
 
 
 router.post('/login', function (req, res, next) {
-
-
-
-
-
 
 
 

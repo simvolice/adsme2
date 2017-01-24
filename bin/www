@@ -7,7 +7,7 @@
 const config = require('../utils/config');
 
 var app = require('../app');
-var debug = require('debug')('myneighbornew:server');
+var debug = require('debug')('adsme2:server');
 var http = require('http');
 
 /**
