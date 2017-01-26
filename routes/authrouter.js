@@ -134,10 +134,11 @@ router.use(function (req, res, next) {
         AuthService.testDB().then(function (result) {
 
 
-            if (result.name == 'MongoError'){
+            if (result.name == "MongoError") {
 
 
                 res.json({"code": "connectDBFailed"});
+
 
 
             }else {
@@ -145,8 +146,8 @@ router.use(function (req, res, next) {
 
                 next();
 
-
             }
+
 
 
 
@@ -173,6 +174,7 @@ router.get('/getcsrftoken', function(req, res, next){
 
 });
 
+/*
 router.use(function (req, res, next) {
 
 
@@ -193,13 +195,13 @@ router.use(function (req, res, next) {
 
 
 });
+*/
 
 
 
 
 
 
-//TODO При регистрации передадутся координаты, под них необходимо создать индекс типа "2Dsphere"
 router.post('/register', function (req, res, next) {
 
 
@@ -246,9 +248,11 @@ router.post('/login', function (req, res, next) {
 
 
 
+            if (result.activateEmail == false){
 
+                res.json({"code": "activateEmailError"});
 
-            if (bcrypt.compareSync(req.body.pass, result.password)){
+            }else if (bcrypt.compareSync(req.body.pass, result.password)){
 
 
 
@@ -272,7 +276,7 @@ router.post('/login', function (req, res, next) {
         }, function (err) {
 
 
-            res.json(err.stack);
+            res.json(err);
 
         });
 

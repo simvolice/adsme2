@@ -83,6 +83,7 @@ module.exports = {
                     role: objParams.role,
                     createAt: objParams.createAt,
 
+                    nameOfCompany: objParams.nameOfCompany
 
 
                 });
@@ -171,19 +172,8 @@ module.exports = {
 
             db.close();
 
+            return result;
 
-
-            if (result.activateEmail) {
-
-
-                return result;
-
-            }else {
-
-
-                return {"code": "activateEmailError"}
-
-            }
 
 
 
