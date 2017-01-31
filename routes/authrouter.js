@@ -165,15 +165,6 @@ router.use(function (req, res, next) {
 /**
  * Для отражения CSRF атак.
  */
-
-let tokencsrf = "e2958130-bd51-4ec1-8523-e4a33f3fc024";
-
-router.get('/getcsrftoken', function(req, res, next){
-    tokencsrf = uuidV4();
-    res.json({"tokencsrf": tokencsrf});
-
-});
-
 /*
 router.use(function (req, res, next) {
 
@@ -273,11 +264,6 @@ router.post('/login', function (req, res, next) {
 
 
 
-        }, function (err) {
-
-
-            res.json(err);
-
         });
 
     }
@@ -293,6 +279,10 @@ router.post('/login', function (req, res, next) {
 
 });
 
+
+
+
+
 router.get('/verifemail', function (req, res, next) {
 
 
@@ -304,11 +294,6 @@ router.get('/verifemail', function (req, res, next) {
 
         res.json({"code": result.lastErrorObject.updatedExisting});
 
-
-    }, function (err) {
-
-
-        res.json(err);
 
     });
 
@@ -371,11 +356,6 @@ router.post('/resetpass', function (req, res, next) {
             res.json({"code": "ok"})
 
 
-        }, function (err) {
-
-            res.json(err);
-
-
         });
 
 
@@ -407,11 +387,6 @@ router.get('/veriftoken', function (req, res, next) {
     AuthService.verifToken(req.query.token).then(function (result) {
 
         res.json({"activateToken": result.activateToken});
-
-
-    }, function (err) {
-
-        res.json(err);
 
 
     })
@@ -446,11 +421,6 @@ router.post('/setnewpass', function(req, res, next){
         AuthService.setNewPassword(objParams).then(function (result) {
 
             res.json({"code": result.lastErrorObject.updatedExisting});
-
-
-        }, function (err) {
-
-            res.json(err);
 
 
         })

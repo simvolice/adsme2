@@ -6,7 +6,8 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
 
-
+var os = require('os');
+var fs = require('fs');
 
 
 
@@ -17,8 +18,6 @@ var helmet = require('helmet');
 
 
 var app = express();
-var admin = express(); // админка будущая
-
 
 
 
@@ -39,7 +38,29 @@ require('./routes')(app);
 
 
 
+//TODO необходимо потом реализовать очистку этой папки, по окончании ковертации.
+const pathToTempVideoDir = os.tmpdir() + '/tmpVideoAdsMe';
 
+
+
+
+fs.stat(pathToTempVideoDir, function (err, stats) {
+
+    if (stats == undefined) {
+
+        fs.mkdirSync(pathToTempVideoDir);
+
+    } else {
+
+
+        console.log(stats);
+
+    }
+
+
+
+
+});
 
 
 // catch 404 and forward to error handler

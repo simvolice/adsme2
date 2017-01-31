@@ -2,15 +2,14 @@
 const express = require('express');
 const router = express.Router();
 var Busboy = require('busboy');
-var inspect = require('util').inspect;
 
 const spawn = require('child_process').spawn;
 
-
+const os = require('os');
 const path = require('path');
 
 const fs = require('fs');
-
+const config = require('../utils/config');
 
 
 function sendToPackager(pathToFile) {
@@ -18,10 +17,13 @@ function sendToPackager(pathToFile) {
 }
 
 
-function sendToConvert(pathToFile) {
+function sendToConvert(pathToFile, res) {
 
 
     console.log("\x1b[42m", 'Convert a video is starting.');
+
+    return res.json({"code": "Convert a video is starting."});
+
 
 }
 
@@ -89,12 +91,12 @@ function returnHeightVideo(arrStreams) {
 }
 
 
-function checkHeightAndFormatOfFiles(pathToFile) {
+function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
     var tempObjForResult = null;
     var tempStrForJSON = '';
-    const ffprobe = spawn("C:\\Users\\Admin\\Downloads\\ffmpeg-3.2.2-win64-static\\ffmpeg-3.2.2-win64-static\\bin\\ffprobe.exe", ['-print_format', 'json', '-show_entries', 'stream=height,codec_name,codec_type', '-show_entries', 'format=format_name', pathToFile]);
+    const ffprobe = spawn(config.pathToFFprobeWindows, ['-print_format', 'json', '-show_entries', 'stream=height,codec_name,codec_type', '-show_entries', 'format=format_name', pathToFile]);
 
     ffprobe.stdout.on('data', function (data) {
 
@@ -112,10 +114,11 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
+
         if (Object.keys(tempObjForResult).length == 0) {
 
 
-            console.log("\x1b[41m", 'This is no VIDOS');
+           return res.json({"code": "noThisVideo"});
 
         } else if (tempObjForResult.format.format_name == 'mov,mp4,m4a,3gp,3g2,mj2'){
 
@@ -125,8 +128,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                detectH264Codec(returnCodecVideo(tempObjForResult.streams));
-
+                return res.json({"code": "Success"});
 
 
 
@@ -134,7 +136,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                console.log("\x1b[41m", 'This is no Height VIDOS');
+                return res.json({"code": "noHeightVideo"});
 
 
             }
@@ -156,7 +158,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                sendToConvert(null);
+                return res.json({"code": "Success"});
 
 
 
@@ -165,7 +167,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                console.log("\x1b[41m", 'This is no Height VIDOS');
+                return res.json({"code": "noHeightVideo"});
 
 
             }
@@ -184,7 +186,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                sendToConvert(null);
+                return res.json({"code": "Success"});
 
 
 
@@ -193,7 +195,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                console.log("\x1b[41m", 'This is no Height VIDOS');
+                return res.json({"code": "noHeightVideo"});
 
 
             }
@@ -211,7 +213,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                sendToConvert(null);
+                return res.json({"code": "Success"});
 
 
 
@@ -220,7 +222,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                console.log("\x1b[41m", 'This is no Height VIDOS');
+                return res.json({"code": "noHeightVideo"});
 
 
             }
@@ -238,7 +240,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                sendToConvert(null);
+                return res.json({"code": "Success"});
 
 
 
@@ -247,7 +249,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                console.log("\x1b[41m", 'This is no Height VIDOS');
+                return res.json({"code": "noHeightVideo"});
 
 
             }
@@ -264,7 +266,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                sendToConvert(null);
+                return res.json({"code": "Success"});
 
 
 
@@ -273,7 +275,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-                console.log("\x1b[41m", 'This is no Height VIDOS');
+                return res.json({"code": "noHeightVideo"});
 
 
             }
@@ -289,7 +291,7 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
-            console.log("\x1b[41m", 'This is no VIDOS');
+            return res.json({"code": "noThisVideo"});
 
 
 
@@ -311,46 +313,90 @@ function checkHeightAndFormatOfFiles(pathToFile) {
 
 
 
+function uploadFile(req, res, sizeFile) {
 
+
+    //TODO необходимо потом реализовать очистку этой папки, по окончании ковертации.
+    const pathToTempVideoDir = os.tmpdir() + '/tmpVideoAdsMe';
+    var saveTo = '';
+    var busboy = new Busboy({ headers: req.headers, limits: {fileSize: sizeFile} });
+    busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        saveTo = path.join(pathToTempVideoDir, path.basename(filename + Math.random()));
+        file.pipe(fs.createWriteStream(saveTo));
+    });
+
+
+    busboy.on('finish', function() {
+
+        if (req.get('sizeFile') == 'partFile') {
+
+            checkHeightAndFormatOfFiles(saveTo, res);
+
+
+
+        } else if (req.get('sizeFile') == 'fullFile'){
+
+
+            sendToConvert(null, res);
+
+
+        } else {
+
+
+           return res.json({"code": "sizeFileHeaderError"});
+
+
+
+        }
+
+
+    });
+    return req.pipe(busboy);
+
+
+
+}
 
 
 router.post('/addvideo', function(req, res, next){
 
 
-    let lengthVideo = Math.pow(10, 8);
+
+    let lengthMaxVideo = Math.pow(10, 8);
+    let lengthChunckVideo = 6400;
 
 
 
-    if (req.headers['content-length'] > lengthVideo) {
+
+    if (req.headers['content-length'] > lengthMaxVideo || req.headers['content-length'] < lengthChunckVideo) {
 
 
         res.json({"code": "lengthVideoError"});
 
 
-    } else {//Первый запрос на сервер
-
-
-        var saveTo = '';
-        var busboy = new Busboy({ headers: req.headers, limits: {fileSize: 6400} });
-        busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-            saveTo = path.join(__dirname, path.basename(filename));
-            file.pipe(fs.createWriteStream(saveTo));
-        });
-        busboy.on('finish', function() {
-
-            checkHeightAndFormatOfFiles(saveTo);
-
-
-            res.writeHead(200, { 'Connection': 'close' });
-            res.end("That's all folks!");
+    } else if (req.get('sizeFile') == 'partFile'){
 
 
 
 
-        });
-        return req.pipe(busboy);
+        uploadFile(req, res, lengthChunckVideo);
 
 
+
+
+
+    } else if (req.get('sizeFile') == 'fullFile'){
+
+
+        uploadFile(req, res, lengthMaxVideo);
+
+
+
+    } else {
+
+
+
+        res.json({"code": "sizeFileHeaderError"});
 
 
 

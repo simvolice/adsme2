@@ -11,7 +11,8 @@ module.exports = {
     urlToMongoDB: "mongodb://admin:1989aaaAAA@194.87.237.153:27017/adsme",
     SECRETJSONWEBTOKEN: "5df9ed11-2bc3-4a2e-a4fc-780c271b25ac",
 
-    urlToMongoDBLocalhost: "mongodb://localhost:27017/adsme"
+    urlToMongoDBLocalhost: "mongodb://localhost:27017/adsme",
+    pathToFFprobeWindows: "C:\\Users\\Admin\\Downloads\\ffmpeg-3.2.2-win64-static\\ffmpeg-3.2.2-win64-static\\bin\\ffprobe.exe"
 
 
 
