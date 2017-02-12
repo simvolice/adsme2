@@ -1,3 +1,10 @@
+
+<a href="https://snyk.io/test/github/simvolice/adsme2"><img src="https://snyk.io/test/github/simvolice/adsme2/badge.svg" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/simvolice/adsme2" style="max-width:100%;"></a>
+
+
+
+
+
 # Мы поддерживаем следующие форматы виде.
 * MOV (mov,mp4,m4a,3gp,3g2,mj2) - с 6400 смещения.
 * MPEG4 (mov,mp4,m4a,3gp,3g2,mj2)
