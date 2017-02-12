@@ -65,7 +65,7 @@ function checkRegisterData(req, res) {
             url: fullUrl(req, "/verifemail"),
             subject: "Активация почтового ящика",
             from: "info@efflife.kz",
-            pathToEmailTemplate: "activateEmail.html",
+            nameEmailTemplate: "activateEmail",
             createAt: new Date(),
             role: req.body.role,
             nameOfCompany: req.body.nameOfCompany,
@@ -342,7 +342,7 @@ router.post('/resetpass', function (req, res, next) {
                 url : fullUrl(req, "/veriftoken", token = result.activateToken),
                 subject: "Восстановление пароля",
                 from: "info@efflife.kz",
-                pathToEmailTemplate: "restorePass.html"
+                nameEmailTemplate: "restorePass"
 
 
             };
