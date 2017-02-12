@@ -165,7 +165,7 @@ router.use(function (req, res, next) {
 /**
  * Для отражения CSRF атак.
  */
-/*
+let tokencsrf = Math.random();
 router.use(function (req, res, next) {
 
 
@@ -186,7 +186,7 @@ router.use(function (req, res, next) {
 
 
 });
-*/
+
 
 
 
@@ -292,7 +292,7 @@ router.get('/verifemail', function (req, res, next) {
 
 
 
-        res.json({"code": result.lastErrorObject.updatedExisting});
+        res.redirect('/loginpage');
 
 
     });
@@ -386,7 +386,7 @@ router.get('/veriftoken', function (req, res, next) {
 
     AuthService.verifToken(req.query.token).then(function (result) {
 
-        res.json({"activateToken": result.activateToken});
+        res.redirect('/setnewpasspage');
 
 
     })
@@ -420,7 +420,7 @@ router.post('/setnewpass', function(req, res, next){
 
         AuthService.setNewPassword(objParams).then(function (result) {
 
-            res.json({"code": result.lastErrorObject.updatedExisting});
+            res.json({"code": "ok"});
 
 
         })

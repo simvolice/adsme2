@@ -4,6 +4,6 @@
  */
 module.exports = function (app) {
     app.use('/', require('./authrouter'));
-    app.use('/', require('./playlistrouter'));
+    app.use('/', require('./videorouter'));
     
 };

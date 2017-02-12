@@ -4,7 +4,7 @@ const router = express.Router();
 var Busboy = require('busboy');
 
 const spawn = require('child_process').spawn;
-
+const execFile = require('child_process').execFile;
 const os = require('os');
 const path = require('path');
 
@@ -12,15 +12,32 @@ const fs = require('fs');
 const config = require('../utils/config');
 
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
 function sendToPackager(pathToFile) {
     console.log("\x1b[42m", 'Packaging video is starting.');
 }
 
 
 function sendToConvert(pathToFile, res) {
+    const pathToTempVideoDir = os.tmpdir() + '\\tmpVideoAdsMe\\';
+
+    const child = execFile(config.pathToFFmpegWindows, ['-i', pathToFile, '-codec:v libx264', '-profile:v high', '-preset', 'slower', '-b:v 1000k', '-vf scale=-1:720', '-threads', '0', pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4'], (error, stdout, stderr) => {
+        if (error) {
+            console.log("\x1b[42m", error);
+        }
+
+        console.log("\x1b[42m", stderr);
+
+       console.log("\x1b[42m", stdout);
+    });
 
 
-    console.log("\x1b[42m", 'Convert a video is starting.');
+
 
     return res.json({"code": "Convert a video is starting."});
 
@@ -321,7 +338,7 @@ function uploadFile(req, res, sizeFile) {
     var saveTo = '';
     var busboy = new Busboy({ headers: req.headers, limits: {fileSize: sizeFile} });
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-        saveTo = path.join(pathToTempVideoDir, path.basename(filename + Math.random()));
+        saveTo = path.join(pathToTempVideoDir, path.basename(getRandomInt(1, 1000000) + filename));
         file.pipe(fs.createWriteStream(saveTo));
     });
 
@@ -337,7 +354,7 @@ function uploadFile(req, res, sizeFile) {
         } else if (req.get('sizeFile') == 'fullFile'){
 
 
-            sendToConvert(null, res);
+            sendToConvert(saveTo, res);
 
 
         } else {
