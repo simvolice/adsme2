@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.0",
+    "bluebird": "^3.4.7",
     "body-parser": "~1.15.2",
     "busboy": "^0.2.14",
     "co": "^4.6.0",

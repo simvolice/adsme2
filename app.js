@@ -9,11 +9,7 @@ var helmet = require('helmet');
 var os = require('os');
 var fs = require('fs');
 
-
-
-
-
-
+var VideoService = require('./services/VideoService');
 
 var app = express();
 
@@ -32,6 +28,10 @@ app.use(helmet());
 
 
 require('./routes')(app);
+
+
+
+
 
 
 

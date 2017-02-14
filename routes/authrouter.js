@@ -165,11 +165,12 @@ router.use(function (req, res, next) {
 /**
  * Для отражения CSRF атак.
  */
-let tokencsrf = Math.random();
+let tokencsrf = '343434343434343434';
 router.use(function (req, res, next) {
 
+    let tokenFromClient = req.body.tokencsrf || req.get('tokenCSRF');
 
-    if (tokencsrf == req.body.tokencsrf) {
+    if (tokencsrf == tokenFromClient) {
 
 
         next();

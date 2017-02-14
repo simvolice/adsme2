@@ -26,20 +26,38 @@ function sendToPackager(pathToFile) {
 function sendToConvert(pathToFile, res) {
     const pathToTempVideoDir = os.tmpdir() + '\\tmpVideoAdsMe\\';
 
-    const child = execFile(config.pathToFFmpegWindows, ['-i', pathToFile, '-codec:v libx264', '-profile:v high', '-preset', 'slower', '-b:v 1000k', '-vf scale=-1:720', '-threads', '0', pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4'], (error, stdout, stderr) => {
-        if (error) {
-            console.log("\x1b[42m", error);
+
+    const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-codec:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-b:v', '1000k', '-vf', 'scale=-1:720', '-threads', '0', pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4']);
+
+
+
+
+
+    ffmpeg.stderr.on('data', (data) => {
+       console.log("\x1b[41m", data.toString());
+    });
+
+
+
+    ffmpeg.on('close', (code) => {
+
+        if (code == 0) {
+
+            return res.json({"code": code});
+
+        }else {
+
+            console.log("\x1b[41m", code);
+
+
         }
 
-        console.log("\x1b[42m", stderr);
 
-       console.log("\x1b[42m", stdout);
     });
 
 
 
 
-    return res.json({"code": "Convert a video is starting."});
 
 
 }
