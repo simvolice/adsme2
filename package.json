@@ -10,7 +10,8 @@
     "start": "node ./bin/www",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect",
-    "version:patch": "npm version patch"
+    "version:patch": "npm version patch",
+    "push:git": "git push --tags origin HEAD:master"
   },
   "dependencies": {
     "bcryptjs": "^2.4.0",
