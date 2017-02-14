@@ -27,6 +27,7 @@ function sendToConvert(pathToFile, res) {
     const pathToTempVideoDir = os.tmpdir() + '\\tmpVideoAdsMe\\';
 
 
+
     const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-codec:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-b:v', '1000k', '-vf', 'scale=-1:720', '-threads', '0', pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4']);
 
 
