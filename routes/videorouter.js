@@ -18,17 +18,69 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function sendToPackager(pathToFile) {
-    console.log("\x1b[42m", 'Packaging video is starting.');
+function sendToPackager(pathToFile, res) {
+
+
+
+
+    let pathToMPD = fs.mkdtempSync('./public/mpddirectory' + path.sep);
+
+
+
+
+
+
+
+    const mp4Box = spawn(config.pathToMp4Box, ['-dash', '4000', '-rap', '-out', pathToMPD + '/' + path.parse(pathToFile).base, pathToFile]);
+
+
+
+
+
+    mp4Box.stderr.on('data', (data) => {
+        console.log("\x1b[41m", data.toString());
+    });
+
+
+
+    mp4Box.on('close', (code) => {
+
+        if (code == 0) {
+
+
+            console.log("\x1b[42m", code);
+            return res.json({"code": code});
+
+        }else {
+
+            console.log("\x1b[41m", code);
+
+
+            return res.json({"code": code});
+
+        }
+
+
+    });
+
+
+
+
+
+
+
+
+
 }
 
 
 function sendToConvert(pathToFile, res) {
     const pathToTempVideoDir = os.tmpdir() + '\\tmpVideoAdsMe\\';
 
+    let outPutMp4File = pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4';
 
 
-    const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-codec:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-b:v', '1000k', '-vf', 'scale=-1:720', '-threads', '0', pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4']);
+    const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-codec:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-b:v', '1000k', '-vf', 'scale=-1:720', '-threads', '0', outPutMp4File]);
 
 
 
@@ -44,12 +96,17 @@ function sendToConvert(pathToFile, res) {
 
         if (code == 0) {
 
-            return res.json({"code": code});
+
+            sendToPackager(outPutMp4File, res);
+
+
 
         }else {
 
             console.log("\x1b[41m", code);
 
+
+            return res.json({"code": code});
 
         }
 
@@ -64,48 +121,7 @@ function sendToConvert(pathToFile, res) {
 }
 
 
-function detectH264Codec(codecName) {
 
-    if (codecName == 'h264') {
-
-
-        //TODO Здесь надо сразу посылать на нарезку, потому что это сырой mpeg4
-
-        console.log("\x1b[42m", codecName);
-
-        sendToPackager(null);
-
-
-    } else {
-
-
-      //TODO Здесь надо сразу посылать на конвертацию, это сырой MOV
-        console.log("\x1b[42m", codecName);
-        sendToConvert(null);
-
-    }
-
-
-
-}
-
-
-function returnCodecVideo(arrStreams) {
-
-    for (let i = 0; i < arrStreams.length; i++) {
-
-        if (arrStreams[i].codec_type == 'video') {
-
-            return arrStreams[i].codec_name;
-
-        }
-
-
-
-
-    }
-
-}
 
 
 function returnHeightVideo(arrStreams) {

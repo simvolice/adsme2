@@ -34,8 +34,29 @@ require('./routes')(app);
 
 
 
+//TODO Потом надо все папки убрать в отдельный модуль
+const pathToMPD = './public/mpddirectory';
 
 
+
+
+fs.stat(pathToMPD, function (err, stats) {
+
+    if (stats == undefined) {
+
+        fs.mkdirSync(pathToMPD);
+
+    } else {
+
+
+        console.log(err);
+
+    }
+
+
+
+
+});
 
 //TODO необходимо потом реализовать очистку этой папки, по окончании ковертации.
 const pathToTempVideoDir = os.tmpdir() + '/tmpVideoAdsMe';
