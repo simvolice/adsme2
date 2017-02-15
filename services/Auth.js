@@ -33,6 +33,7 @@ module.exports = {
             const col = db.collection('users');
 
 
+            col.createIndex({ nameOfCompany : "text" });
 
 
 
@@ -53,6 +54,10 @@ module.exports = {
 
 
                     addressOfmonitor: objParams.addressOfmonitor,
+
+                    costOfSecond: objParams.costOfSecond,
+                    graphOfWork: objParams.graphOfWork,
+
                     numberOfBankCard: objParams.numberOfBankCard
 
 

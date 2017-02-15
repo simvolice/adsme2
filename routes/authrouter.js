@@ -70,7 +70,13 @@ function checkRegisterData(req, res) {
             role: req.body.role,
             nameOfCompany: req.body.nameOfCompany,
             addressOfmonitor: req.body.addressOfMonitor,
-            numberOfBankCard: req.body.numberOfBankCard
+
+
+            costOfSecond: req.body.costOfSecond,
+            graphOfWork: req.body.graphOfWork,
+
+            numberOfBankCard: req.body.numberOfBankCard,
+
 
 
         };
