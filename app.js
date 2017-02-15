@@ -20,15 +20,14 @@ var app = express();
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, 'public'), {"maxAge": "1y"}));
+app.use(express.static(path.join(__dirname, 'public'))); //TODO Потом надо добавить для кэша{"maxAge": "86400"}
 app.use(helmet());
-
+app.use(helmet.noCache());
 
 
 require('./routes')(app);
-
 
 
 
@@ -81,6 +80,40 @@ fs.stat(pathToTempVideoDir, function (err, stats) {
 
 
 });
+
+
+
+
+
+
+/**
+ * Для отражения CSRF атак.
+ */
+let tokenCSRF = '343434343434343434';
+app.use(function (req, res, next) {
+
+    let tokenFromClient = req.body.tokenCSRF || req.get('tokenCSRF') || req.query.tokenCSRF;
+
+    if (tokenCSRF == tokenFromClient) {
+
+
+        next();
+
+    }else {
+
+
+        res.json({"code": "noCsrfToken"});
+
+    }
+
+});
+
+
+
+
+
+
+
 
 
 // catch 404 and forward to error handler

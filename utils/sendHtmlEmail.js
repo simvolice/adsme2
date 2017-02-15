@@ -4,15 +4,15 @@
 const config = require("./config");
 
 
-var hbs = require('nodemailer-express-handlebars');
+const hbs = require('nodemailer-express-handlebars');
 
 
 
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport(config.smtpServer);
+let transporter = nodemailer.createTransport(config.smtpServer);
 
-var optionsHbs = {
+let optionsHbs = {
 
     viewEngine: ".hbs",
     viewPath: "C:\\Users\\Admin\\WebstormProjects\\adsme2\\templates"
@@ -37,7 +37,7 @@ module.exports = {
 
 
 
-        var mail = {
+        let mail = {
             from: objParams.from,
             to: objParams.email,
             subject: objParams.subject,

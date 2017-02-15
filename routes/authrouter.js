@@ -20,7 +20,7 @@ function fullUrl(req, pathname, token = uuidV4()) {
     return url.format({
         protocol: req.protocol,
         hostname: req.hostname,
-        port: process.env.PORT,
+        port: config.port,
         pathname: pathname,
         search: "token=" + token
     });
@@ -84,22 +84,8 @@ function checkRegisterData(req, res) {
 
         AuthService.registration(objParams).then(function (result) {
 
-
-
-
-
-            if (result.result.ok == 1) {
-
                 sendHtmlEmail.sendEmail(objParams);
-                res.json({"code": "ok"});
-
-            } else {
-
                 res.json({"code": result});
-
-
-            }
-
 
 
 
@@ -124,69 +110,8 @@ function checkRegisterData(req, res) {
 }
 
 
-/**
- * Промежуточный мидлвор, для проверки подключения к базе
- */
-router.use(function (req, res, next) {
 
 
-
-        AuthService.testDB().then(function (result) {
-
-
-            if (result.name == "MongoError") {
-
-
-                res.json({"code": "connectDBFailed"});
-
-
-
-            }else {
-
-
-                next();
-
-            }
-
-
-
-
-
-        });
-
-
-
-
-
-
-});
-
-
-/**
- * Для отражения CSRF атак.
- */
-let tokencsrf = '343434343434343434';
-router.use(function (req, res, next) {
-
-    let tokenFromClient = req.body.tokencsrf || req.get('tokenCSRF');
-
-    if (tokencsrf == tokenFromClient) {
-
-
-        next();
-
-    }else {
-
-
-        res.json({"code": "noCsrfToken"});
-
-    }
-
-
-
-
-
-});
 
 
 
@@ -249,7 +174,7 @@ router.post('/login', function (req, res, next) {
 
 
 
-                res.json({"code": "ok", "token": jsonwebtoken.sign(result, config.SECRETJSONWEBTOKEN)});
+                res.json({"code": "ok", "sessionToken": jsonwebtoken.sign(result, config.SECRETJSONWEBTOKEN)});
 
 
             }else {
@@ -286,21 +211,15 @@ router.post('/login', function (req, res, next) {
 
 router.get('/verifemail', function (req, res, next) {
 
-
-
     AuthService.verifEmail(req.query.token).then(function (result) {
 
 
 
 
-        res.redirect('/loginpage');
+        res.redirect('/loginpage.html');
 
 
     });
-
-
-
-
 
 
 
@@ -387,7 +306,7 @@ router.get('/veriftoken', function (req, res, next) {
 
     AuthService.verifToken(req.query.token).then(function (result) {
 
-        res.redirect('/setnewpasspage');
+        res.redirect('/setnewpasspage.html');
 
 
     })

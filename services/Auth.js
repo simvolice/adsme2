@@ -18,42 +18,7 @@ module.exports = {
 
 
 
-    testDB: function () {
 
-        return co (function*() {
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLocalhost);
-
-
-
-
-
-
-            db.close();
-
-
-            return db;
-
-
-
-
-
-
-        }).catch(function (err) {
-
-
-
-
-            return err;
-
-
-
-        });
-
-
-
-    },
 
 
     registration: function (objParams) {
@@ -61,16 +26,15 @@ module.exports = {
         return co (function*() {
 
             // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLocalhost);
-           
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
             // Get the collection
             const col = db.collection('users');
 
 
 
 
-            if (objParams.role == 'individual') {
-
 
                 const result = yield col.insertOne({
 
@@ -83,49 +47,23 @@ module.exports = {
                     role: objParams.role,
                     createAt: objParams.createAt,
 
-                    nameOfCompany: objParams.nameOfCompany
-
-
-                });
-
-                db.close();
-
-
-                return result;
-
-
-
-
-            } else {
-
-                const result = yield col.insertOne({
-
-
-                    email: objParams.email,
-
-                    password: objParams.password,
-                    activateEmail: false,
-                    activateToken: objParams.activateToken,
-                    role: objParams.role,
-                    createAt: objParams.createAt,
                     nameOfCompany: objParams.nameOfCompany,
+
+
+
+
                     addressOfmonitor: objParams.addressOfmonitor,
                     numberOfBankCard: objParams.numberOfBankCard
 
 
 
+
                 });
 
                 db.close();
 
 
                 return result;
-
-
-
-
-            }
-
 
 
 
@@ -158,7 +96,7 @@ module.exports = {
 
 
             // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLocalhost);
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
             
 
             // Get the collection
@@ -202,7 +140,7 @@ module.exports = {
 
 
 
-            const db = yield MongoClient.connect(config.urlToMongoDBLocalhost);
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
             
 
 
@@ -244,7 +182,7 @@ module.exports = {
 
 
             // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLocalhost);
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -284,7 +222,7 @@ module.exports = {
 
 
 
-            const db = yield MongoClient.connect(config.urlToMongoDBLocalhost);
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
             
 
 
@@ -323,7 +261,7 @@ module.exports = {
 
 
             // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLocalhost);
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
             
 
             // Get the collection

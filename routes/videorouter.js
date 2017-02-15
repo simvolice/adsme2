@@ -2,15 +2,16 @@
 const express = require('express');
 const router = express.Router();
 var Busboy = require('busboy');
-
+const jsonwebtoken = require('jsonwebtoken');
 const spawn = require('child_process').spawn;
-const execFile = require('child_process').execFile;
+
 const os = require('os');
 const path = require('path');
-
+const url = require('url');
 const fs = require('fs');
 const config = require('../utils/config');
 
+const VideoService = require('../services/VideoService');
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -18,20 +19,32 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function sendToPackager(pathToFile, res) {
+function fullUrl(req, path) {
+    return url.format({
+        protocol: req.protocol,
+        hostname: req.hostname,
+        port: config.port,
+        pathname: 'mpddirectory/' + path + '/'
+
+    });
+}
+
+function sendToPackager(pathToFile, res, originalFileName, req) {
 
 
 
 
     let pathToMPD = fs.mkdtempSync('./public/mpddirectory' + path.sep);
 
+    let nameOfMpdFile = path.parse(pathToFile).base;
+
+    let nameOfMpdDir = path.parse(pathToMPD).base;
 
 
 
 
 
-
-    const mp4Box = spawn(config.pathToMp4Box, ['-dash', '4000', '-rap', '-out', pathToMPD + '/' + path.parse(pathToFile).base, pathToFile]);
+    const mp4Box = spawn(config.pathToMp4Box, ['-dash', '4000', '-rap', '-out', pathToMPD + '/' + nameOfMpdFile, pathToFile]);
 
 
 
@@ -48,7 +61,28 @@ function sendToPackager(pathToFile, res) {
         if (code == 0) {
 
 
-            console.log("\x1b[42m", code);
+            let objParams = {
+
+                originalFileName: originalFileName,
+                mpdOutputFile: fullUrl(req, nameOfMpdDir) + fs.readdirSync(pathToMPD)[0],
+                mp4OutputFile: fullUrl(req, nameOfMpdDir) + fs.readdirSync(pathToMPD)[1],
+                userId: jsonwebtoken.verify(req.get('sessionToken'), config.SECRETJSONWEBTOKEN)._id
+
+
+            };
+
+
+
+            VideoService.addvideo(objParams).then(function (result) {
+
+
+                console.log("\x1b[43m", result);
+
+
+            });
+
+
+
             return res.json({"code": code});
 
         }else {
@@ -74,7 +108,7 @@ function sendToPackager(pathToFile, res) {
 }
 
 
-function sendToConvert(pathToFile, res) {
+function sendToConvert(pathToFile, res, req, originalFileName) {
     const pathToTempVideoDir = os.tmpdir() + '\\tmpVideoAdsMe\\';
 
     let outPutMp4File = pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4';
@@ -97,7 +131,7 @@ function sendToConvert(pathToFile, res) {
         if (code == 0) {
 
 
-            sendToPackager(outPutMp4File, res);
+            sendToPackager(outPutMp4File, res, originalFileName, req);
 
 
 
@@ -372,7 +406,9 @@ function uploadFile(req, res, sizeFile) {
     const pathToTempVideoDir = os.tmpdir() + '/tmpVideoAdsMe';
     var saveTo = '';
     var busboy = new Busboy({ headers: req.headers, limits: {fileSize: sizeFile} });
+    let originalFileName = '';
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        originalFileName = path.parse(filename).name;
         saveTo = path.join(pathToTempVideoDir, path.basename(getRandomInt(1, 1000000) + filename));
         file.pipe(fs.createWriteStream(saveTo));
     });
@@ -389,7 +425,7 @@ function uploadFile(req, res, sizeFile) {
         } else if (req.get('sizeFile') == 'fullFile'){
 
 
-            sendToConvert(saveTo, res);
+            sendToConvert(saveTo, res, req, originalFileName);
 
 
         } else {

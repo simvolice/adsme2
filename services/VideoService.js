@@ -6,7 +6,7 @@
 const config = require('../utils/config');
 
 const MongoClient = require('mongodb').MongoClient;
-
+const ObjectId = require('mongodb').ObjectId;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
@@ -18,8 +18,7 @@ const co = require('co');
 module.exports = {
 
 
-    addvideo: function () {
-
+    addvideo: function (objParams) {
 
 
 
@@ -28,9 +27,24 @@ module.exports = {
             // Connection URL
             const db = yield MongoClient.connect(config.urlToMongoDBLinode);
             // Get the collection
-            const col = db.collection('users');
+            const col = db.collection('video');
 
-            const result = yield col.find({}).toArray();
+            col.createIndex({ userId : 1 });
+
+
+
+            const result = yield col.insertOne({
+
+
+                originalFileName: objParams.originalFileName,
+                mpdOutputFile: objParams.mpdOutputFile,
+                mp4OutputFile: objParams.mp4OutputFile,
+                userId: new ObjectId(objParams.userId)
+
+
+
+
+            });
 
 
 
