@@ -6,10 +6,11 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
 
-var os = require('os');
-var fs = require('fs');
 
-var VideoService = require('./services/VideoService');
+const createAllDir = require('./utils/createDir');
+
+
+
 
 var app = express();
 
@@ -33,57 +34,11 @@ require('./routes')(app);
 
 
 
-//TODO Потом надо все папки убрать в отдельный модуль
-const pathToMPD = './public/mpddirectory';
 
 
 
 
-fs.stat(pathToMPD, function (err, stats) {
-
-    if (stats == undefined) {
-
-        fs.mkdirSync(pathToMPD);
-
-    } else {
-
-
-        console.log(err);
-
-    }
-
-
-
-
-});
-
-//TODO необходимо потом реализовать очистку этой папки, по окончании ковертации.
-const pathToTempVideoDir = os.tmpdir() + '/tmpVideoAdsMe';
-
-
-
-
-fs.stat(pathToTempVideoDir, function (err, stats) {
-
-    if (stats == undefined) {
-
-        fs.mkdirSync(pathToTempVideoDir);
-
-    } else {
-
-
-        console.log(err);
-
-    }
-
-
-
-
-});
-
-
-
-
+createAllDir.createAllDir();
 
 
 /**
@@ -91,29 +46,18 @@ fs.stat(pathToTempVideoDir, function (err, stats) {
  */
 let tokenCSRF = '343434343434343434';
 app.use(function (req, res, next) {
-
     let tokenFromClient = req.body.tokenCSRF || req.get('tokenCSRF') || req.query.tokenCSRF;
-
     if (tokenCSRF == tokenFromClient) {
-
 
         next();
 
-    }else {
-
+    } else {
 
         res.json({"code": "noCsrfToken"});
 
     }
 
 });
-
-
-
-
-
-
-
 
 
 // catch 404 and forward to error handler

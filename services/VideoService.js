@@ -68,4 +68,75 @@ module.exports = {
     },
 
 
+    getAllVideos: function (id) {
+
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('video');
+
+
+
+            const result = yield col.find({userId: id}).toArray();
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+            return err;
+
+
+        });
+
+
+
+    },
+
+
+
+    deleteOneVideo: function (objParams) {
+
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('video');
+
+            const result = yield col.deleteOne({_id: ObjectId(objParams.videoId), userId: ObjectId(objParams.userId)});
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+            return err;
+
+
+        });
+
+
+
+    }
+
+
 };

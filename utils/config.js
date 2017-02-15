@@ -2,7 +2,7 @@
  * Created by Nikita on 16.01.2017.
  */
 
-
+const os = require('os');
 
 module.exports = {
 
@@ -15,7 +15,11 @@ module.exports = {
 
     pathToFFprobeWindows: "C:\\Users\\Admin\\Downloads\\ffmpeg-3.2.2-win64-static\\ffmpeg-3.2.2-win64-static\\bin\\ffprobe.exe",
     pathToFFmpegWindows: "C:\\Users\\Admin\\Downloads\\ffmpeg-3.2.2-win64-static\\ffmpeg-3.2.2-win64-static\\bin\\ffmpeg.exe",
-    pathToMp4Box: "C:\\Program Files\\GPAC\\mp4box.exe"
+    pathToMp4Box: "C:\\Program Files\\GPAC\\mp4box.exe",
+
+
+    pathToMPD: './public/mpddirectory',
+    pathToTempVideoDir : os.tmpdir() + '/tmpVideoAdsMe/'
 
 
 

@@ -34,7 +34,7 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
 
 
 
-    let pathToMPD = fs.mkdtempSync('./public/mpddirectory' + path.sep);
+    let pathToMPD = fs.mkdtempSync(config.pathToMPD + path.sep);
 
     let nameOfMpdFile = path.parse(pathToFile).base;
 
@@ -60,6 +60,9 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
 
         if (code == 0) {
 
+
+            //Удаляем сконвертированный файл
+            fs.unlinkSync(pathToFile);
 
             let objParams = {
 
@@ -109,9 +112,8 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
 
 
 function sendToConvert(pathToFile, res, req, originalFileName) {
-    const pathToTempVideoDir = os.tmpdir() + '\\tmpVideoAdsMe\\';
 
-    let outPutMp4File = pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4';
+    let outPutMp4File = config.pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4';
 
 
     const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-codec:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-b:v', '1000k', '-vf', 'scale=-1:720', '-threads', '0', outPutMp4File]);
@@ -130,6 +132,9 @@ function sendToConvert(pathToFile, res, req, originalFileName) {
 
         if (code == 0) {
 
+
+            //Удаляем загруженный файл с клиента
+            fs.unlinkSync(pathToFile);
 
             sendToPackager(outPutMp4File, res, originalFileName, req);
 
@@ -402,14 +407,13 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 function uploadFile(req, res, sizeFile) {
 
 
-    //TODO необходимо потом реализовать очистку этой папки, по окончании ковертации.
-    const pathToTempVideoDir = os.tmpdir() + '/tmpVideoAdsMe';
+
     var saveTo = '';
     var busboy = new Busboy({ headers: req.headers, limits: {fileSize: sizeFile} });
     let originalFileName = '';
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         originalFileName = path.parse(filename).name;
-        saveTo = path.join(pathToTempVideoDir, path.basename(getRandomInt(1, 1000000) + filename));
+        saveTo = path.join(config.pathToTempVideoDir, path.basename(getRandomInt(1, 1000000) + filename));
         file.pipe(fs.createWriteStream(saveTo));
     });
 
@@ -500,6 +504,46 @@ router.post('/addvideo', function(req, res, next){
 
 
 
+
+});
+
+
+router.post('/getallvideos', function(req, res, next){
+
+
+
+    VideoService.getAllVideos(jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id).then(function (result) {
+
+
+        res.json({"code": "ok", "resultFromDb": result});
+
+
+
+    });
+
+
+
+});
+
+
+router.post('/deleteonevideo', function(req, res, next){
+
+
+
+    let objParams = {
+
+        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id,
+        videoId: req.body.videoId
+
+    };
+
+VideoService.deleteOneVideo(objParams).then(function (result) {
+
+    res.json({"code": "ok", "resultFromDb": result});
+
+
+
+});
 
 });
 

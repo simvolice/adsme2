@@ -113,15 +113,6 @@ module.exports = {
             return result;
 
 
-
-
-
-
-
-
-
-
-
         }).catch(function (err) {
 
             return err;
