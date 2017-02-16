@@ -120,8 +120,64 @@ function checkRegisterData(req, res) {
 
 
 
+/**
+ * Для отражения CSRF атак.
+ */
+router.use(function (req, res, next) {
 
 
+
+
+    if (req.method == "GET") {
+
+
+        next();
+
+
+    } else {
+
+
+        let tokenFromClient = req.body.tokenCSRF || req.get('tokenCSRF') || req.query.tokenCSRF;
+
+
+        AuthService.getCsrfToken(tokenFromClient).then(function (result) {
+
+            if (result != null && result.tokencsrf == tokenFromClient) {
+
+
+                next();
+
+            }  else {
+
+
+                res.json({"code": "noCsrfToken"});
+
+            }
+
+        });
+
+
+
+    }
+
+
+
+
+
+});
+
+router.get('/gettokencsrf', function(req, res, next){
+
+
+    const tokenCSRF = uuidV4();
+
+    AuthService.saveCsrfToken(tokenCSRF).then(function (result) {
+
+        res.json({"code": "ok", "tokenCSRF": tokenCSRF});
+
+    });
+
+});
 
 
 

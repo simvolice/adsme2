@@ -41,24 +41,6 @@ require('./routes')(app);
 createAllDir.createAllDir();
 
 
-/**
- * Для отражения CSRF атак.
- */
-let tokenCSRF = '343434343434343434'; //TODO Надо перетащить в базу, а то не будет работать нормально
-
-app.use(function (req, res, next) {
-    let tokenFromClient = req.body.tokenCSRF || req.get('tokenCSRF') || req.query.tokenCSRF;
-    if (tokenCSRF == tokenFromClient) {
-
-        next();
-
-    } else {
-
-        res.json({"code": "noCsrfToken"});
-
-    }
-
-});
 
 
 // catch 404 and forward to error handler

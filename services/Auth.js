@@ -290,9 +290,71 @@ module.exports = {
     },
 
 
+    saveCsrfToken: function (tokencsrf) {
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('tokencsrf');
 
 
 
+            const result = yield col.insertOne({tokencsrf: tokencsrf});
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+            return err;
+
+
+        });
+
+
+    },
+
+    getCsrfToken: function (tokencsrf) {
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('tokencsrf');
+
+
+
+            const result = yield col.findOne({tokencsrf: tokencsrf});
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+            return err;
+
+
+        });
+
+
+    },
 
 
 };
