@@ -5,7 +5,6 @@ var logger = require('morgan');
 
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
-const uuidV4 = require('uuid/v4');
 
 const createAllDir = require('./utils/createDir');
 
@@ -25,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public'))); //TODO Потом надо добавить для кэша{"maxAge": "86400"}
 app.use(helmet());
-app.use(helmet.noCache());
+app.use(helmet.noCache()); //TODO В продакшене надо будет убрать
 
 
 require('./routes')(app);
