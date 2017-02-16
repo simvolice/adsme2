@@ -34,7 +34,29 @@ module.exports = {
 
 
 
-            const result = yield col.find({ '$text': {'$search' : searchQuery } }).toArray();
+
+            const result = yield col.aggregate(
+                [ { '$match': { '$text': {'$search' : searchQuery, '$language': 'ru'} } },
+
+                    {
+
+
+                        '$project': {
+
+
+
+                            "nameOfCompany": 1,
+
+                            "addressOfmonitor": 1,
+                            "costOfSecond": 1,
+                            "graphOfWork": 1,
+
+
+
+
+
+                        }}]).toArray();
+
 
 
 
@@ -51,7 +73,10 @@ module.exports = {
         });
 
 
-    },
+    }
+
+
+
 
 
 

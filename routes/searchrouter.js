@@ -12,6 +12,7 @@ router.post('/searchcompany', function(req, res, next){
 
 
 
+
     SearchService.searchCompany(req.body.searchQuery).then(function (result) {
 
         res.json({"code": "ok", "resultFromDb": result});
@@ -23,6 +24,12 @@ router.post('/searchcompany', function(req, res, next){
 
 
 });
+
+
+
+
+
+
 
 
 

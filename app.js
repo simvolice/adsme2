@@ -5,7 +5,7 @@ var logger = require('morgan');
 
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
-
+const uuidV4 = require('uuid/v4');
 
 const createAllDir = require('./utils/createDir');
 
@@ -44,7 +44,8 @@ createAllDir.createAllDir();
 /**
  * Для отражения CSRF атак.
  */
-let tokenCSRF = '343434343434343434';
+let tokenCSRF = '343434343434343434'; //TODO Надо перетащить в базу, а то не будет работать нормально
+
 app.use(function (req, res, next) {
     let tokenFromClient = req.body.tokenCSRF || req.get('tokenCSRF') || req.query.tokenCSRF;
     if (tokenCSRF == tokenFromClient) {
