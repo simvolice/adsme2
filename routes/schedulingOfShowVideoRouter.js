@@ -86,7 +86,28 @@ router.post('/getallvideoforscreenholder', function(req, res, next){
 
 
 
+router.post('/deleteoneschedullingvideo', function(req, res, next){
 
+
+
+    let objParams = {
+
+
+        videoSchedullingId: req.body.videoSchedullingId,
+        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id
+
+
+
+    };
+
+    SchedullingService.deleteOneSchedullingVideo(objParams).then(function (result) {
+
+        res.json({"code": "ok", "resultFromDb": result});
+
+
+    });
+
+});
 
 
 

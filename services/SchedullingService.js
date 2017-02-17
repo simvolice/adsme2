@@ -115,7 +115,7 @@ module.exports = {
         return co(function*() {
 
 
-            // Connection URL
+
             const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
@@ -131,19 +131,69 @@ module.exports = {
                         'as': "video_url"
                     }},
 
-                    { '$project' : { '_id' : 0 , 'video_url' : 1 } },
+                    { '$project' : {
+
+
+                        'timeRangeOfShowVideo': 0,
+                        'dateOfShowVideo': 0,
+                        'videoId': 0,
+                        'userId': 0,
+                        'video_url' : 1,
+
+                        "video_url": { "_id": 0}
+
+
+
+                }},
 
                     { '$unwind': '$video_url'},
 
 
-                    {
-                        '$replaceRoot': { 'newRoot': "$video_url" }
-                    }
+
 
 
 
 
                 ]).toArray();
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+
+
+            return err;
+
+
+        });
+
+
+
+
+
+    },
+
+
+
+    deleteOneSchedullingVideo: function (objParams) {
+
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('schedulling');
+
+            const result = yield col.deleteOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)});
 
 
 
@@ -161,9 +211,8 @@ module.exports = {
 
 
 
-
-
     }
+
 
 
 
