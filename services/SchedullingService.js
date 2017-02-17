@@ -105,9 +105,65 @@ module.exports = {
 
 
 
+    },
+
+
+    getallvideoforscreenholder: function (userId) {
+
+
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('schedulling');
+
+            const result = yield   col.aggregate(
+                [ { '$match': { "userId": ObjectId(userId) } },
+                    { '$lookup': {
+                        'from': "video",
+                        'localField': "videoId",
+                        'foreignField': "_id",
+                        'as': "video_url"
+                    }},
+
+                    { '$project' : { '_id' : 0 , 'video_url' : 1 } },
+
+                    { '$unwind': '$video_url'},
+
+
+                    {
+                        '$replaceRoot': { 'newRoot': "$video_url" }
+                    }
+
+
+
+
+                ]).toArray();
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+            return err;
+
+
+        });
+
+
+
+
+
     }
-
-
 
 
 

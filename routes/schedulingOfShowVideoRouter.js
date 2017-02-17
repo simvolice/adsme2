@@ -67,7 +67,22 @@ router.post('/getschedullerbydate', function(req, res, next){
 
 
 
+router.post('/getallvideoforscreenholder', function(req, res, next){
 
+
+
+    let userId = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id;
+
+    SchedullingService.getallvideoforscreenholder(userId).then(function (result) {
+
+
+        res.json({"code": "ok", "resultFromDb": result});
+
+
+    });
+
+
+});
 
 
 
