@@ -8,5 +8,6 @@ module.exports = function (app) {
     app.use('/', require('./searchrouter'));
     app.use('/', require('./schedulingOfShowVideoRouter'));
     app.use('/', require('./notificationRouter'));
+    app.use('/', require('./onairRouter'));
 
 };

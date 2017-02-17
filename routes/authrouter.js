@@ -66,7 +66,7 @@ function checkRegisterData(req, res) {
             subject: "Активация почтового ящика",
             from: "info@efflife.kz",
             nameEmailTemplate: "activateEmail",
-            createAt: new Date(),
+
             role: req.body.role,
             nameOfCompany: req.body.nameOfCompany,
             addressOfmonitor: req.body.addressOfMonitor,

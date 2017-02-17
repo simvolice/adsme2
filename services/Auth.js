@@ -4,6 +4,8 @@
 const config = require('../utils/config');
 
 const MongoClient = require('mongodb').MongoClient;
+const Decimal128 = require('mongodb').Decimal128;
+
 
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
@@ -46,7 +48,8 @@ module.exports = {
                     activateEmail: false,
                     activateToken: objParams.activateToken,
                     role: objParams.role,
-                    createAt: objParams.createAt,
+                    createAt: new Date( new Date().getTime() -  ( new Date().getTimezoneOffset() * 60000 ) ),
+
 
                     nameOfCompany: objParams.nameOfCompany,
 
@@ -58,7 +61,8 @@ module.exports = {
                     costOfSecond: objParams.costOfSecond,
                     graphOfWork: objParams.graphOfWork,
 
-                    numberOfBankCard: objParams.numberOfBankCard
+                    numberOfBankCard: objParams.numberOfBankCard,
+                    incomeMoney: Decimal128.fromString('0.00')
 
 
 
@@ -304,7 +308,7 @@ module.exports = {
 
 
 
-            const result = yield col.insertOne({tokencsrf: tokencsrf, createAt: new Date()});
+            const result = yield col.insertOne({tokencsrf: tokencsrf, createAt: new Date( new Date().getTime() -  ( new Date().getTimezoneOffset() * 60000 ) )});
 
 
 

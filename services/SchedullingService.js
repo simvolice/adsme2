@@ -7,6 +7,8 @@ const config = require('../utils/config');
 
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
+const Int32 = require('mongodb').Int32;
+
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
@@ -41,7 +43,9 @@ module.exports = {
                 videoId: ObjectId(objParams.videoId),
                 dateOfShowVideo: objParams.dateOfShowVideo,
                 timeRangeOfShowVideo: objParams.timeRangeOfShowVideo,
-                statusOfEnableVideo: false
+                statusOfEnableVideo: false,
+                statusOfPayment: false,
+                statusOfPlayToEnd: Int32(0)
 
 
 
