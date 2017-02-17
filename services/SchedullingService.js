@@ -40,7 +40,8 @@ module.exports = {
                 userId: ObjectId(objParams.userId),
                 videoId: ObjectId(objParams.videoId),
                 dateOfShowVideo: objParams.dateOfShowVideo,
-                timeRangeOfShowVideo: objParams.timeRangeOfShowVideo
+                timeRangeOfShowVideo: objParams.timeRangeOfShowVideo,
+                statusOfEnableVideo: false
 
 
 
@@ -211,7 +212,42 @@ module.exports = {
 
 
 
+    },
+
+
+    setEnableVideoInSchedulling: function (objParams) {
+
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('schedulling');
+
+            const result = yield col.updateOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)}, {$set: {statusOfEnableVideo: true}});
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+            return err;
+
+
+        });
+
+
+
     }
+
 
 
 

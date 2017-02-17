@@ -112,6 +112,28 @@ router.post('/deleteoneschedullingvideo', function(req, res, next){
 
 
 
+router.post('/enableoneschedullingvideo', function(req, res, next){
+
+
+
+    let objParams = {
+
+
+        videoSchedullingId: req.body.videoSchedullingId,
+        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id
+
+
+
+    };
+
+    SchedullingService.setEnableVideoInSchedulling(objParams).then(function (result) {
+
+        res.json({"code": "ok", "resultFromDb": result});
+
+
+    });
+
+});
 
 
 
