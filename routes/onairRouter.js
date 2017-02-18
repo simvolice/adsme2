@@ -4,6 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const OnairService = require('../services/OnairService');
+const SetClientInfo = require('../services/SetClientInfo');
 const config = require('../utils/config');
 const jsonwebtoken = require('jsonwebtoken');
 
@@ -17,13 +18,26 @@ const jsonwebtoken = require('jsonwebtoken');
 router.post('/getonair', function(req, res, next){
 
 
+
+
+
+
+
     let objParams = {
 
         userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id,
-        dateNow: req.body.dateNow
+        dateNow: req.body.dateNow,
+        infoFromClient: req.useragent
 
 
     };
+
+
+
+
+    SetClientInfo.addClientInfo(objParams);
+
+
 
 
 
