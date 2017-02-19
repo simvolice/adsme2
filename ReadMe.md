@@ -3,6 +3,8 @@
 
 
 
+[Документаци на API](https://github.com/simvolice/adsme2/wiki)
+
 
 
 # Мы поддерживаем следующие форматы виде.
