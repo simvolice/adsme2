@@ -83,7 +83,7 @@ module.exports = {
 
 
 
-            const result = yield col.find({userId: id}).toArray();
+            const result = yield col.find({userId: ObjectId(id)}).toArray();
 
 
 

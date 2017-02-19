@@ -13,12 +13,22 @@ const config = require('../utils/config');
 
 const VideoService = require('../services/VideoService');
 
+
+
+/*
+Получить рандомное целое число
+ */
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+
+
+/*
+Собрать полный урл сервера
+ */
 function fullUrl(req, path) {
     return url.format({
         protocol: req.protocol,
@@ -29,6 +39,12 @@ function fullUrl(req, path) {
     });
 }
 
+
+
+
+/*
+Отправка на нарезку потоков DASH, в MP4Box
+ */
 function sendToPackager(pathToFile, res, originalFileName, req) {
 
 
@@ -110,7 +126,9 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
 
 }
 
-
+/*
+Отправка на ковертацию в ffmpeg
+ */
 function sendToConvert(pathToFile, res, req, originalFileName) {
 
     let outPutMp4File = config.pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4';
@@ -135,7 +153,7 @@ function sendToConvert(pathToFile, res, req, originalFileName) {
 
             //Удаляем загруженный файл с клиента
             fs.unlinkSync(pathToFile);
-
+            console.log("\x1b[41m", code);
             sendToPackager(outPutMp4File, res, originalFileName, req);
 
 
@@ -162,7 +180,9 @@ function sendToConvert(pathToFile, res, req, originalFileName) {
 
 
 
-
+/*
+Вернуть высоту кадра видео
+ */
 function returnHeightVideo(arrStreams) {
 
     for (let i = 0; i < arrStreams.length; i++) {
@@ -181,7 +201,9 @@ function returnHeightVideo(arrStreams) {
 
 }
 
-
+/*
+Проверка на высоту и формат видео файла
+ */
 function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
@@ -204,6 +226,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
         tempObjForResult = JSON.parse(tempStrForJSON);
 
 
+        fs.unlinkSync(pathToFile);
 
 
         if (Object.keys(tempObjForResult).length == 0) {
@@ -219,7 +242,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
 
-                return res.json({"code": "Success"});
+                return res.json({"code": "ok"});
 
 
 
@@ -249,7 +272,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
 
-                return res.json({"code": "Success"});
+                return res.json({"code": "ok"});
 
 
 
@@ -277,7 +300,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
 
-                return res.json({"code": "Success"});
+                return res.json({"code": "ok"});
 
 
 
@@ -304,7 +327,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
 
-                return res.json({"code": "Success"});
+                return res.json({"code": "ok"});
 
 
 
@@ -331,7 +354,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
 
-                return res.json({"code": "Success"});
+                return res.json({"code": "ok"});
 
 
 
@@ -357,7 +380,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
 
-                return res.json({"code": "Success"});
+                return res.json({"code": "ok"});
 
 
 
@@ -403,7 +426,9 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 }
 
 
-
+/*
+Загрузка файла на сервер
+ */
 function uploadFile(req, res, sizeFile) {
 
 
@@ -450,6 +475,11 @@ function uploadFile(req, res, sizeFile) {
 }
 
 
+
+
+/*
+API для загрузки видео на сервер
+ */
 router.post('/addvideo', function(req, res, next){
 
 
@@ -507,12 +537,15 @@ router.post('/addvideo', function(req, res, next){
 
 });
 
-
+/*
+ API получить все видео ипешника
+ */
 router.post('/getallvideos', function(req, res, next){
 
 
+    let id = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id;
 
-    VideoService.getAllVideos(jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id).then(function (result) {
+    VideoService.getAllVideos(id).then(function (result) {
 
 
         res.json({"code": "ok", "resultFromDb": result});
@@ -525,7 +558,9 @@ router.post('/getallvideos', function(req, res, next){
 
 });
 
-
+/*
+ API удалить только одно видео ипешника
+ */
 router.post('/deleteonevideo', function(req, res, next){
 
 
