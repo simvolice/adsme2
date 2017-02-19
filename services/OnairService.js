@@ -65,7 +65,7 @@ module.exports = {
                     { '$project' : {
 
 
-                        "_id":0,
+
                         "userId": 0,
                         "originalFileName": 0
 
