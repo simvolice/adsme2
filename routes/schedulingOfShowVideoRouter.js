@@ -15,8 +15,8 @@ router.post('/setnewvideotoscheduling', function(req, res, next){
 
        userId: req.body.userId,
        videoId: req.body.videoId,
-        dateOfShowVideo: req.body.dateOfShowVideo,
-        timeRangeOfShowVideo: req.body.timeRangeOfShowVideo
+        dateOfShowVideo: req.body.dateOfShowVideo
+
 
 
 
@@ -42,27 +42,6 @@ router.post('/setnewvideotoscheduling', function(req, res, next){
 
 
 
-
-router.post('/getschedullerbydate', function(req, res, next){
-
-    let objParams = {
-
-        userId: req.body.userId,
-        dateOfShowVide: req.body.dateOfShowVide
-
-
-
-    };
-
-    SchedullingService.getVideosScheduler(objParams).then(function (result) {
-
-
-        res.json({"code": "ok", "resultFromDb": result});
-
-
-    });
-
-});
 
 
 
