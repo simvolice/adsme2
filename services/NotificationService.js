@@ -40,7 +40,7 @@ module.exports = {
                 userId: ObjectId(objParams.idUserToNotification),
 
                 messageOfNotification: objParams.messageOfNotification,
-                dateOfNotification: new Date(),
+                dateOfNotification: new Date( new Date().getTime() -  ( new Date().getTimezoneOffset() * 60000 ) ),
                 nameOfFromCompany: objParams.nameOfFromCompany
 
 

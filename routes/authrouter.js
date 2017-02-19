@@ -15,7 +15,9 @@ const sendHtmlEmail = require('../utils/sendHtmlEmail');
 const uuidV4 = require('uuid/v4');
 
 
-
+/*
+Собираем полный путь сервера
+ */
 function fullUrl(req, pathname, token = uuidV4()) {
     return url.format({
         protocol: req.protocol,
@@ -27,7 +29,9 @@ function fullUrl(req, pathname, token = uuidV4()) {
 }
 
 
-
+/*
+Для регистрации
+ */
 function checkRegisterData(req, res) {
 
 
@@ -91,7 +95,7 @@ function checkRegisterData(req, res) {
         AuthService.registration(objParams).then(function (result) {
 
                 sendHtmlEmail.sendEmail(objParams);
-                res.json({"code": result});
+                res.json({"code": "ok", "resultFromDb": result});
 
 
 
@@ -121,7 +125,7 @@ function checkRegisterData(req, res) {
 
 
 /**
- * Для отражения CSRF атак.
+ * Идет проверка по токену. Берем из базы и сверяем его.
  */
 router.use(function (req, res, next) {
 
@@ -166,6 +170,13 @@ router.use(function (req, res, next) {
 
 });
 
+
+
+/*
+Апи для сохранения токена в базу, он будет дествителен ровно на сутки
+для этого в базе надо создать индекс по полю "createAt", и установить
+у него "Expire" на 86400 секунд - 1 сутки,
+ */
 router.get('/gettokencsrf', function(req, res, next){
 
 
@@ -180,7 +191,9 @@ router.get('/gettokencsrf', function(req, res, next){
 });
 
 
-
+/*
+Для регистрации
+ */
 router.post('/register', function (req, res, next) {
 
 
@@ -317,6 +330,11 @@ router.post('/resetpass', function (req, res, next) {
 
 
         AuthService.resetPassFindUser(req.body.email).then(function (result) {
+
+
+            res.json({"code": "ok", "activateToken": result.activateToken});
+
+
             const objParams = {
 
                 email: req.body.email,
@@ -335,7 +353,6 @@ router.post('/resetpass', function (req, res, next) {
             sendHtmlEmail.sendEmail(objParams);
 
 
-            res.json({"code": "ok"})
 
 
         });
@@ -395,14 +412,14 @@ router.post('/setnewpass', function(req, res, next){
 
         let objParams = {
 
-            token: req.body.token,
+            activateToken: req.body.activateToken,
             pass: bcrypt.hashSync(req.body.pass, 10)
 
         };
 
         AuthService.setNewPassword(objParams).then(function (result) {
 
-            res.json({"code": "ok"});
+            res.json({"code": "ok", "resultFromDb": result.lastErrorObject});
 
 
         })

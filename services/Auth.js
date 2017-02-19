@@ -58,7 +58,7 @@ module.exports = {
 
                     addressOfmonitor: objParams.addressOfmonitor,
 
-                    costOfSecond: objParams.costOfSecond,
+                    costOfSecond: Decimal128.fromString(objParams.costOfSecond),
                     graphOfWork: objParams.graphOfWork,
 
                     numberOfBankCard: objParams.numberOfBankCard,
@@ -230,7 +230,7 @@ module.exports = {
 
 
 
-            const result = yield col.findOneAndUpdate({activateToken: objParams.token}, {$set: {password: objParams.pass}});
+            const result = yield col.findOneAndUpdate({activateToken: objParams.activateToken}, {$set: {password: objParams.pass}});
 
 
 
