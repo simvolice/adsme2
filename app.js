@@ -1,17 +1,17 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
 
-var bodyParser = require('body-parser');
-var helmet = require('helmet');
-var useragent = require('express-useragent');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const useragent = require('express-useragent');
 const createAllDir = require('./utils/createDir');
 
 
 
 
-var app = express();
+const app = express();
 
 
 
@@ -44,7 +44,7 @@ createAllDir.createAllDir();
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });

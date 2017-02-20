@@ -16,15 +16,15 @@ const uuidV4 = require('uuid/v4');
 
 
 /*
-Собираем полный путь сервера
+Собираем полный путь сервера вместе с токеном
  */
-function fullUrl(req, pathname, token = uuidV4()) {
+function fullUrl(req, pathname, activateToken) {
     return url.format({
         protocol: req.protocol,
         hostname: req.hostname,
         port: config.port,
         pathname: pathname,
-        search: "token=" + token
+        search: "token=" + activateToken
     });
 }
 
@@ -61,12 +61,14 @@ function checkRegisterData(req, res) {
 
         const hash = bcrypt.hashSync(req.body.pass, 10);
 
+        let activateToken = uuidV4();
 
         const objParams = {
 
             email: req.body.email,
             password: hash,
-            url: fullUrl(req, "/verifemail"),
+            activateToken: activateToken,
+            url: fullUrl(req, "/verifemail", activateToken),
             subject: "Активация почтового ящика",
             from: "info@efflife.kz",
             nameEmailTemplate: "activateEmail",
@@ -84,9 +86,6 @@ function checkRegisterData(req, res) {
 
 
         };
-
-
-        objParams.activateToken = url.parse(objParams.url, true, true).query.token;
 
 
 
