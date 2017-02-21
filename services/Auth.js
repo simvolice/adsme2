@@ -35,7 +35,6 @@ module.exports = {
             const col = db.collection('users');
 
 
-            col.createIndex({ nameOfCompany : "text" });
 
 
 

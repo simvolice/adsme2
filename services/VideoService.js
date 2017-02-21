@@ -29,7 +29,6 @@ module.exports = {
             // Get the collection
             const col = db.collection('video');
 
-            col.createIndex({ userId : 1 });
 
 
 
