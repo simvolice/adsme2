@@ -56,7 +56,7 @@ if (process.env.DEPLOY == 'dev') {
         domainName: "test.efflife.kz",
 
 
-        pathToHbsTemplate: "/var/www/adsme/adsme2/templates",
+        pathToHbsTemplate: "/var/www/adsme2/templates",
 
         pathToMPD: '../public/mpddirectory',
         pathToTempVideoDir : os.tmpdir() + '/tmpVideoAdsMe/'
