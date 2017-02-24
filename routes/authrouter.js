@@ -3,30 +3,19 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
 const url = require('url');
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 
 const AuthService = require('../services/Auth');
 
 const testEmail = /^(?=.{3,254}$)(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const testPass = /^(?=[\x20-\x7E]*?[\w])(?=[\x20-\x7E]*?[\W])(?![\x20-\x7E]*?[\s])[\x20-\x7E]{6,20}$/;
+const testPass = /^(?=[\x20-\x7E]*?[\w])(?=[\x20-\x7E]*?[\W])(?![\x20-\x7E]*?[\s])[\x20-\x7E]{7,20}$/;
 
 const sendHtmlEmail = require('../utils/sendHtmlEmail');
 const uuidV4 = require('uuid/v4');
 
 
-/*
-Собираем полный путь сервера вместе с токеном
- */
-function fullUrl(req, pathname, activateToken) {
-    return url.format({
-        protocol: req.protocol,
-        hostname: req.hostname,
-        port: config.port,
-        pathname: pathname,
-        search: "token=" + activateToken
-    });
-}
+
 
 
 /*
@@ -68,7 +57,7 @@ function checkRegisterData(req, res) {
             email: req.body.email,
             password: hash,
             activateToken: activateToken,
-            url: fullUrl(req, "/verifemail", activateToken),
+            url: config.domainName + "/verifemail?token=" + activateToken,
             subject: "Активация почтового ящика",
             from: "info@efflife.kz",
             nameEmailTemplate: "activateEmail",
@@ -92,6 +81,8 @@ function checkRegisterData(req, res) {
 
 
         AuthService.registration(objParams).then(function (result) {
+
+
 
                 sendHtmlEmail.sendEmail(objParams);
                 res.json({"code": "ok", "resultFromDb": result});
@@ -129,6 +120,14 @@ function checkRegisterData(req, res) {
 router.use(function (req, res, next) {
 
 
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, tokenCSRF, sessionToken, sizeFile");
+
+
+
+    console.log("\x1b[42m", req.body);
 
 
     if (req.method == "GET") {
@@ -338,7 +337,7 @@ router.post('/resetpass', function (req, res, next) {
 
                 email: req.body.email,
 
-                url : fullUrl(req, "/veriftoken", token = result.activateToken),
+                url : config.domainName + "/veriftoken?token=" + result.activateToken,
                 subject: "Восстановление пароля",
                 from: "info@efflife.kz",
                 nameEmailTemplate: "restorePass"
@@ -431,8 +430,6 @@ router.post('/setnewpass', function(req, res, next){
 
 
 });
-
-
 
 
 

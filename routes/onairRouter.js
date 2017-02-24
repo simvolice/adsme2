@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 const OnairService = require('../services/OnairService');
 const SetClientInfo = require('../services/SetClientInfo');
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 const jsonwebtoken = require('jsonwebtoken');
 
 

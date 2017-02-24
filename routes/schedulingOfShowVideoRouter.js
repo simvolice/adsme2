@@ -4,7 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const SchedullingService = require('../services/SchedullingService');
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 const jsonwebtoken = require('jsonwebtoken');
 
 router.post('/setnewvideotoscheduling', function(req, res, next){

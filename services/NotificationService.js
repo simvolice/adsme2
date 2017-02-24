@@ -1,7 +1,7 @@
 /**
  * Created by simvolice on 17.02.2017 1:56
  */
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;

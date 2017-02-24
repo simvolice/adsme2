@@ -9,7 +9,7 @@ const os = require('os');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 
 const VideoService = require('../services/VideoService');
 
@@ -26,18 +26,6 @@ function getRandomInt(min, max) {
 
 
 
-/*
-Собрать полный урл сервера
- */
-function fullUrl(req, path) {
-    return url.format({
-        protocol: req.protocol,
-        hostname: req.hostname,
-        port: config.port,
-        pathname: 'mpddirectory/' + path + '/'
-
-    });
-}
 
 
 
@@ -83,8 +71,8 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
             let objParams = {
 
                 originalFileName: originalFileName,
-                mpdOutputFile: fullUrl(req, nameOfMpdDir) + fs.readdirSync(pathToMPD)[0],
-                mp4OutputFile: fullUrl(req, nameOfMpdDir) + fs.readdirSync(pathToMPD)[1],
+                mpdOutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + fs.readdirSync(pathToMPD)[0],
+                mp4OutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + fs.readdirSync(pathToMPD)[1],
                 userId: jsonwebtoken.verify(req.get('sessionToken'), config.SECRETJSONWEBTOKEN)._id
 
 

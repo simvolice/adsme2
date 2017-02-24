@@ -2,7 +2,7 @@
  * Created by simvolice on 16.02.2017 1:21
  */
 
-const config = require('./config');
+const config = require('./devConfig');
 
 const fs = require('fs');
 

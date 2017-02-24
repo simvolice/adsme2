@@ -1,7 +1,7 @@
 /**
  * Created by Admin on 06.01.2017.
  */
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 
 const MongoClient = require('mongodb').MongoClient;
 const Decimal128 = require('mongodb').Decimal128;
@@ -20,14 +20,11 @@ module.exports = {
 
 
 
-
-
-
     registration: function (objParams) {
 
         return co (function*() {
 
-            // Connection URL
+
             const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
@@ -68,10 +65,16 @@ module.exports = {
 
                 });
 
+
+
+
                 db.close();
 
 
+
                 return result;
+
+
 
 
 
@@ -113,6 +116,7 @@ module.exports = {
 
 
             const result = yield col.findOne({email: objParams.email});
+
 
 
 
@@ -350,6 +354,9 @@ module.exports = {
 
 
         }).catch(function (err) {
+
+
+
 
             return err;
 

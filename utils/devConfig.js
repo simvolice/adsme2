@@ -15,7 +15,10 @@ module.exports = {
     pathToFFprobeWindows: "C:\\Users\\Admin\\Downloads\\ffmpeg-3.2.2-win64-static\\ffmpeg-3.2.2-win64-static\\bin\\ffprobe.exe",
     pathToFFmpegWindows: "C:\\Users\\Admin\\Downloads\\ffmpeg-3.2.2-win64-static\\ffmpeg-3.2.2-win64-static\\bin\\ffmpeg.exe",
     pathToMp4Box: "C:\\Program Files\\GPAC\\mp4box.exe",
+    domainName: "localhost:3000",
 
+
+    pathToHbsTemplate: "C:\\Users\\Admin\\WebstormProjects\\adsme2\\templates",
 
     pathToMPD: './public/mpddirectory',
     pathToTempVideoDir : os.tmpdir() + '/tmpVideoAdsMe/'

@@ -7,7 +7,7 @@
 
 
 
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;

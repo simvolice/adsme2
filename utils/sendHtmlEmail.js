@@ -1,7 +1,7 @@
 /**
  * Created by Admin on 13.01.2017.
  */
-const config = require("./config");
+const config = require("./devConfig");
 
 
 const hbs = require('nodemailer-express-handlebars');
@@ -15,7 +15,7 @@ let transporter = nodemailer.createTransport(config.smtpServer);
 let optionsHbs = {
 
     viewEngine: ".hbs",
-    viewPath: "C:\\Users\\Admin\\WebstormProjects\\adsme2\\templates"
+    viewPath: config.pathToHbsTemplate
 
 
 };

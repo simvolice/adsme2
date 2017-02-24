@@ -4,17 +4,17 @@
  * Module dependencies.
  */
 
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 
 var app = require('../app');
-var debug = require('debug')('adsme2:server');
+var debug = require('debug')('adsme:server');
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(config.port || '3000');
+var port = normalizePort(config.port);
 app.set('port', port);
 
 /**

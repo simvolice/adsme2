@@ -7,7 +7,7 @@
 const express = require('express');
 const router = express.Router();
 const NotificationService = require('../services/NotificationService');
-const config = require('../utils/config');
+const config = require('../utils/devConfig');
 const jsonwebtoken = require('jsonwebtoken');
 
 
