@@ -22,10 +22,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, 'public'))); //TODO Потом надо добавить для кэша{"maxAge": "86400"}
+//TODO Потом надо добавить для кэша{"maxAge": "86400"}
+app.use(express.static(path.join(__dirname, 'public')));
 
-
-
+//TODO в продакте надо обязательно включить
 /*app.use(helmet());
 app.use(helmet.noCache());*/
 
