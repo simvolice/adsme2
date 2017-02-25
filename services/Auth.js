@@ -54,7 +54,7 @@ module.exports = {
 
                     addressOfmonitor: objParams.addressOfmonitor,
 
-                    costOfSecond: Decimal128.fromString(objParams.costOfSecond),
+                    costOfSecond: Decimal128.fromString(objParams.costOfSecond || "0.00"),
                     graphOfWork: objParams.graphOfWork,
 
                     numberOfBankCard: objParams.numberOfBankCard,
