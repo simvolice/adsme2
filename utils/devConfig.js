@@ -24,7 +24,7 @@ if (process.env.DEPLOY == 'dev') {
         pathToFFprobeWindows: "C:\\Users\\Admin\\Downloads\\ffmpeg-3.2.2-win64-static\\ffmpeg-3.2.2-win64-static\\bin\\ffprobe.exe",
         pathToFFmpegWindows: "C:\\Users\\Admin\\Downloads\\ffmpeg-3.2.2-win64-static\\ffmpeg-3.2.2-win64-static\\bin\\ffmpeg.exe",
         pathToMp4Box: "C:\\Program Files\\GPAC\\mp4box.exe",
-        domainName: "localhost:3000",
+        domainName: "http://localhost:3000",
 
 
         pathToHbsTemplate: "C:\\Users\\Admin\\WebstormProjects\\adsme2\\templates",
@@ -53,7 +53,7 @@ if (process.env.DEPLOY == 'dev') {
         pathToFFprobeWindows: "ffprobe",
         pathToFFmpegWindows: "ffmpeg",
         pathToMp4Box: "MP4box",
-        domainName: "test.efflife.kz",
+        domainName: "http://test.efflife.kz",
 
 
         pathToHbsTemplate: "/var/www/adsme2/templates",

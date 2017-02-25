@@ -35,8 +35,6 @@ module.exports = {
 
 
 
-
-
         let mail = {
             from: objParams.from,
             to: objParams.email,
