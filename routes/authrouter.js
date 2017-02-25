@@ -289,7 +289,7 @@ router.get('/verifemail', function (req, res, next) {
 
 
 
-        res.redirect('/loginpage.html');
+        res.redirect('/login');
 
 
     });
@@ -383,7 +383,7 @@ router.get('/veriftoken', function (req, res, next) {
 
     AuthService.verifToken(req.query.token).then(function (result) {
 
-        res.redirect('/setnewpasspage.html');
+        res.redirect('/resetpass');
 
 
     })
