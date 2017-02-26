@@ -189,6 +189,66 @@ function returnHeightVideo(arrStreams) {
 
 }
 
+
+function checkOnliHeightVideo(heightOfVideo, res) {
+    if (heightOfVideo >= 720) {
+
+
+
+        return res.json({"code": "ok"});
+
+
+
+
+    } else {
+
+
+
+        return res.json({"code": "noHeightVideo"});
+
+
+    }
+}
+
+
+
+function checkOnlyFormatOfVideo(tempObjForResult, res) {
+
+
+
+    let ArrFormatsVideo = ['mov,mp4,m4a,3gp,3g2,mj2', 'avi', 'asf', 'flv', 'matroska,webm', 'mpeg'];
+
+    if (Object.keys(tempObjForResult).length == 0) {
+
+
+        return res.json({"code": "noThisVideo"});
+
+    } else if (ArrFormatsVideo.includes(tempObjForResult.format.format_name)){
+
+
+        checkOnliHeightVideo(returnHeightVideo(tempObjForResult.streams), res);
+
+
+
+    }else {
+
+
+
+
+        return res.json({"code": "noThisVideo"});
+
+
+
+
+    }
+
+
+
+
+}
+
+
+
 /*
 Проверка на высоту и формат видео файла
  */
@@ -211,199 +271,34 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
     ffprobe.stdout.on('close', (code) => {
 
+
+        if (code == false) {
+
+
+
+
+
         tempObjForResult = JSON.parse(tempStrForJSON);
 
 
         fs.unlinkSync(pathToFile);
 
 
-        if (Object.keys(tempObjForResult).length == 0) {
+        checkOnlyFormatOfVideo(tempObjForResult, res);
 
 
-           return res.json({"code": "noThisVideo"});
 
-        } else if (tempObjForResult.format.format_name == 'mov,mp4,m4a,3gp,3g2,mj2'){
 
 
 
-            if (returnHeightVideo(tempObjForResult.streams) >= 720) {
+        } else {
 
 
-
-                return res.json({"code": "ok"});
-
-
-
-            } else {
-
-
-
-                return res.json({"code": "noHeightVideo"});
-
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-        } else if (tempObjForResult.format.format_name == 'avi'){
-
-
-            if (returnHeightVideo(tempObjForResult.streams) >= 720) {
-
-
-
-                return res.json({"code": "ok"});
-
-
-
-
-            } else {
-
-
-
-                return res.json({"code": "noHeightVideo"});
-
-
-            }
-
-
-
-
-
-
-
-        }else if (tempObjForResult.format.format_name == 'asf'){
-
-
-
-            if (returnHeightVideo(tempObjForResult.streams) >= 720) {
-
-
-
-                return res.json({"code": "ok"});
-
-
-
-
-            } else {
-
-
-
-                return res.json({"code": "noHeightVideo"});
-
-
-            }
-
-
-
-
-
-
-        }else if (tempObjForResult.format.format_name == 'flv'){
-
-
-
-            if (returnHeightVideo(tempObjForResult.streams) >= 720) {
-
-
-
-                return res.json({"code": "ok"});
-
-
-
-
-            } else {
-
-
-
-                return res.json({"code": "noHeightVideo"});
-
-
-            }
-
-
-
-
-
-
-        }else if (tempObjForResult.format.format_name == 'matroska,webm'){
-
-
-
-            if (returnHeightVideo(tempObjForResult.streams) >= 720) {
-
-
-
-                return res.json({"code": "ok"});
-
-
-
-
-            } else {
-
-
-
-                return res.json({"code": "noHeightVideo"});
-
-
-            }
-
-
-
-
-
-
-        }else if (tempObjForResult.format.format_name == 'mpeg'){
-
-
-            if (returnHeightVideo(tempObjForResult.streams) >= 720) {
-
-
-
-                return res.json({"code": "ok"});
-
-
-
-
-            } else {
-
-
-
-                return res.json({"code": "noHeightVideo"});
-
-
-            }
-
-
-
-
-
-
-
-        }else {
-
-
-
-
-            return res.json({"code": "noThisVideo"});
-
+            return res.json({"code": "detectFormatError"});
 
 
 
         }
-
-
-
-
-
 
     });
 
@@ -421,6 +316,7 @@ function uploadFile(req, res, sizeFile) {
 
 
 
+
     var saveTo = '';
     var busboy = new Busboy({ headers: req.headers, limits: {fileSize: sizeFile} });
     let originalFileName = '';
@@ -428,6 +324,9 @@ function uploadFile(req, res, sizeFile) {
         originalFileName = path.parse(filename).name;
         saveTo = path.join(config.pathToTempVideoDir, path.basename(getRandomInt(1, 1000000) + filename));
         file.pipe(fs.createWriteStream(saveTo));
+
+
+
     });
 
 
