@@ -52,7 +52,7 @@ if (process.env.DEPLOY == 'dev') {
 
         pathToFFprobeWindows: "ffprobe",
         pathToFFmpegWindows: "ffmpeg",
-        pathToMp4Box: "MP4box",
+        pathToMp4Box: "MP4Box",
         domainName: "http://test.efflife.kz",
 
 
