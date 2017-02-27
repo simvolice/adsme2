@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const useragent = require('express-useragent');
 const createAllDir = require('./utils/createDir');
+const cors = require('cors');//TODO В продакте обязательно удалить
 
 
 
@@ -14,6 +15,9 @@ const createAllDir = require('./utils/createDir');
 const app = express();
 
 
+//TODO В продакте обязательно удалить
+cors({credentials: true, origin: true});
+app.use(cors());
 
 
 
@@ -25,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //TODO Потом надо добавить для кэша{"maxAge": "86400"}
 app.use(express.static(path.join(__dirname, 'public')));
 
-//TODO в продакте надо обязательно включить
+//TODO в продакте надо обязательно раскоментить
 /*app.use(helmet());
 app.use(helmet.noCache());*/
 

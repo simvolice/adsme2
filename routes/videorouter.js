@@ -41,6 +41,7 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
     let pathToMPD = fs.mkdtempSync(config.pathToMPD + path.sep);
 
     let nameOfMpdFile = path.parse(pathToFile).base;
+    let nameOfMpdFileForDB = path.parse(pathToFile).name;
 
     let nameOfMpdDir = path.parse(pathToMPD).base;
 
@@ -48,7 +49,7 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
 
 
 
-    const mp4Box = spawn(config.pathToMp4Box, ['-dash', '4000', '-rap', '-out', pathToMPD + '/' + nameOfMpdFile, pathToFile]);
+    const mp4Box = spawn(config.pathToMp4Box, ['-dash-strict', '4000', '-rap', '-profile', 'dashavc264:live', '-out', pathToMPD + '/' + nameOfMpdFile, pathToFile]);
 
 
 
@@ -71,8 +72,8 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
             let objParams = {
 
                 originalFileName: originalFileName,
-                mpdOutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + fs.readdirSync(pathToMPD)[0],
-                mp4OutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + fs.readdirSync(pathToMPD)[1],
+                mpdOutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '.mpd',
+                mp4OutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '_dashinit.mp4',
                 userId: jsonwebtoken.verify(req.get('sessionToken'), config.SECRETJSONWEBTOKEN)._id
 
 
@@ -122,7 +123,7 @@ function sendToConvert(pathToFile, res, req, originalFileName) {
     let outPutMp4File = config.pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4';
 
 
-    const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-codec:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-b:v', '1000k', '-vf', 'scale=-1:720', '-threads', '0', outPutMp4File]);
+    const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-c:v', 'libx264',  '-b:v', '2200k', '-r', '24', '-x264opts', 'keyint=48:min-keyint=48:no-scenecut', '-profile:v', 'main', '-preset', 'medium', '-movflags', '+faststart', outPutMp4File]);
 
 
 
