@@ -237,8 +237,12 @@ router.post('/login', function (req, res, next) {
         AuthService.login(objParams).then(function (result) {
 
 
+            if (result == null) {
 
-            if (result.activateEmail == false){
+                res.json({"code": "userNotFound"});
+
+
+            } else if (result.activateEmail == false){
 
                 res.json({"code": "activateEmailError"});
 
