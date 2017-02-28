@@ -6,6 +6,8 @@ const router = express.Router();
 const SchedullingService = require('../services/SchedullingService');
 const config = require('../utils/devConfig');
 const jsonwebtoken = require('jsonwebtoken');
+const OrderService = require('../services/OrderService');
+const createOrderLink = require('../utils/createOrderLink');
 
 router.post('/setnewvideotoscheduling', function(req, res, next){
 
@@ -90,6 +92,34 @@ router.post('/deleteoneschedullingvideo', function(req, res, next){
 
 
 
+function createLinkForPay(objParams) {
+
+
+
+
+    OrderService.createOrder(objParams).then(function (result) {
+
+
+
+
+        console.log("\x1b[41m", createOrderLink.newLink(result.ops[0]));
+
+
+
+
+
+    });
+
+
+
+
+}
+
+
+
+
+
+
 
 router.post('/enableoneschedullingvideo', function(req, res, next){
 
@@ -99,15 +129,43 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
 
         videoSchedullingId: req.body.videoSchedullingId,
-        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id
+        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id,
+        userIdWhoPayOrder: req.body.userId,
+        Amount: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN).costOfSecond.$numberDecimal
 
 
 
     };
 
+
+
+
     SchedullingService.setEnableVideoInSchedulling(objParams).then(function (result) {
 
-        res.json({"code": "ok", "resultFromDb": result});
+
+        createLinkForPay(objParams);
+        res.json({"code": "ok"});
+
+
+        /*if (result.result.nModified == 1) {
+
+
+            createLinkForPay(objParams);
+
+            res.json({"code": "ok"});
+
+
+        } else {
+
+            res.json({"code": "thisVideoYetEnable"});
+
+
+
+        }*/
+
+
+
+
 
 
     });

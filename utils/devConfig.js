@@ -30,7 +30,14 @@ if (process.env.DEPLOY == 'dev') {
         pathToHbsTemplate: "C:\\Users\\Admin\\WebstormProjects\\adsme2\\templates",
 
         pathToMPD: './public/mpddirectory',
-        pathToTempVideoDir : os.tmpdir() + '/tmpVideoAdsMe/'
+        pathToTempVideoDir : os.tmpdir() + '/tmpVideoAdsMe/',
+
+
+
+        MerchantId: '76023',
+        PrivateSecurityKey: 'ffe62eec-6371-44d9-9a9e-84da888b067b'
+
+
 
 
 
@@ -59,7 +66,11 @@ if (process.env.DEPLOY == 'dev') {
         pathToHbsTemplate: "/var/www/adsme2/templates",
 
         pathToMPD: '../public/mpddirectory',
-        pathToTempVideoDir : os.tmpdir() + '/tmpVideoAdsMe/'
+        pathToTempVideoDir : os.tmpdir() + '/tmpVideoAdsMe/',
+
+
+        MerchantId: '76023',
+        PrivateSecurityKey: 'ffe62eec-6371-44d9-9a9e-84da888b067b'
 
 
 
