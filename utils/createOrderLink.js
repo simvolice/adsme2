@@ -30,6 +30,9 @@ module.exports = {
            "Currency=" + "KZT" + "&" +
 
            "OrderDescription=" + "Оплата за размещение рекламы на экране" + "&" +
+
+
+
            "PrivateSecurityKey=" + config.PrivateSecurityKey
 
 
@@ -56,7 +59,13 @@ module.exports = {
            Currency: "KZT",
 
            OrderDescription: "Оплата за размещение рекламы на экране",
-           SecurityKey: SecurityKey
+
+           SecurityKey: SecurityKey,
+
+           userIdWhoPayOrder: objParams.userIdWhoPayOrder.toString(),
+           userId: objParams.userId.toString(),
+
+
 
 
 

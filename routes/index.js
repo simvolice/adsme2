@@ -9,5 +9,6 @@ module.exports = function (app) {
     app.use('/', require('./schedulingOfShowVideoRouter'));
     app.use('/', require('./notificationRouter'));
     app.use('/', require('./onairRouter'));
+    app.use('/', require('./payRouter'));
 
 };

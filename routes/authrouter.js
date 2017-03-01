@@ -214,13 +214,13 @@ router.post('/login', function (req, res, next) {
 
 
 
-        return  res.json({"code": "emailWrongRegExp"});
+        return  res.json({"code": "userNotFound"});
 
 
     } else if (!testPass.test(req.body.pass)) {
 
 
-        return  res.json({"code": "passWrongRegExp"});
+        return  res.json({"code": "userNotFound"});
 
     } else {
 
@@ -257,7 +257,7 @@ router.post('/login', function (req, res, next) {
             }else {
 
 
-                res.json({"code": "passWrong"});
+                res.json({"code": "userNotFound"});
 
 
             }

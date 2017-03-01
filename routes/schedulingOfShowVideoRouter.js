@@ -7,6 +7,7 @@ const SchedullingService = require('../services/SchedullingService');
 const config = require('../utils/devConfig');
 const jsonwebtoken = require('jsonwebtoken');
 const OrderService = require('../services/OrderService');
+const NotificationService = require('../services/NotificationService');
 const createOrderLink = require('../utils/createOrderLink');
 
 router.post('/setnewvideotoscheduling', function(req, res, next){
@@ -100,11 +101,22 @@ function createLinkForPay(objParams) {
     OrderService.createOrder(objParams).then(function (result) {
 
 
+        let objParamsNotif = {
+
+            nameOfFromCompany: objParams.nameOfCompany,
+            messageOfNotification: "Вам необходимо оплатить заказ, чтобы это сделать пройдите по следующей ссылке: ",
+
+            linkPay: createOrderLink.newLink(result.ops[0]),
+            idUserToNotification: objParams.userIdWhoPayOrder
+
+
+        };
 
 
         console.log("\x1b[41m", createOrderLink.newLink(result.ops[0]));
 
 
+        NotificationService.addNotification(objParamsNotif);
 
 
 
@@ -130,6 +142,8 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
         videoSchedullingId: req.body.videoSchedullingId,
         userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id,
+        nameOfCompany: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN).nameOfCompany,
+
         userIdWhoPayOrder: req.body.userId,
         Amount: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN).costOfSecond.$numberDecimal
 
@@ -143,11 +157,9 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
     SchedullingService.setEnableVideoInSchedulling(objParams).then(function (result) {
 
 
-        createLinkForPay(objParams);
-        res.json({"code": "ok"});
 
 
-        /*if (result.result.nModified == 1) {
+        if (result.result.nModified == 1) {
 
 
             createLinkForPay(objParams);
@@ -161,7 +173,7 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
 
 
-        }*/
+        }
 
 
 
