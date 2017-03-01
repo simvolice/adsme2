@@ -123,7 +123,7 @@ function sendToConvert(pathToFile, res, req, originalFileName) {
     let outPutMp4File = config.pathToTempVideoDir + 'output' + getRandomInt(1, 1000000) + '.mp4';
 
 
-    const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-c:v', 'libx264',  '-b:v', '2200k', '-r', '24', '-x264opts', 'keyint=48:min-keyint=48:no-scenecut', '-profile:v', 'main', '-preset', 'medium', '-movflags', '+faststart', outPutMp4File]);
+    const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-c:v', 'libx264',  '-b:v', '2200k', '-r', '24', '-x264opts', 'keyint=48:min-keyint=48:no-scenecut', '-profile:v', 'main', '-preset', 'ultrafast', '-movflags', '+faststart', outPutMp4File]);
 
 
 
