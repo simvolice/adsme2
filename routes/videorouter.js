@@ -192,7 +192,7 @@ function returnHeightVideo(arrStreams) {
 
 
 function checkOnliHeightVideo(heightOfVideo, res) {
-    if (heightOfVideo >= 720) {
+    if (heightOfVideo >= 360) {
 
 
 
@@ -221,6 +221,9 @@ function checkOnlyFormatOfVideo(tempObjForResult, res) {
 
     if (Object.keys(tempObjForResult).length == 0) {
 
+
+
+        console.log("\x1b[44m", tempObjForResult);
 
         return res.json({"code": "noThisVideo"});
 
@@ -273,6 +276,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
     ffprobe.stdout.on('close', (code) => {
 
 
+
         if (code == false) {
 
 
@@ -283,6 +287,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
         fs.unlinkSync(pathToFile);
+
 
 
         checkOnlyFormatOfVideo(tempObjForResult, res);
@@ -373,7 +378,7 @@ router.post('/addvideo', function(req, res, next){
 
 
     let lengthMaxVideo = Math.pow(10, 8);
-    let lengthChunckVideo = 6400;
+    let lengthChunckVideo = 1000000;
 
 
 
