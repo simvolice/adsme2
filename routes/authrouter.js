@@ -178,11 +178,11 @@ router.use(function (req, res, next) {
 router.get('/gettokencsrf', function(req, res, next){
 
 
-    const tokenCSRF = uuidV4();
 
-    AuthService.saveCsrfToken(tokenCSRF).then(function (result) {
 
-        res.json({"code": "ok", "tokenCSRF": tokenCSRF});
+    AuthService.saveCsrfToken(uuidV4()).then(function (result) {
+
+        res.json({"code": "ok", "tokenCSRF": result.ops[0].tokencsrf});
 
     });
 

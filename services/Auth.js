@@ -297,13 +297,13 @@ module.exports = {
     },
 
 
-    saveCsrfToken: function (tokencsrf) {
+    saveCsrfToken: async function (tokencsrf) {
 
-        return co(function*() {
+
 
 
             // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+            const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -311,7 +311,7 @@ module.exports = {
 
 
 
-            const result = yield col.insertOne({tokencsrf: tokencsrf, createAt: new Date( new Date().getTime() -  ( new Date().getTimezoneOffset() * 60000 ) )});
+            const result = await col.insertOne({tokencsrf: tokencsrf, createAt: new Date( new Date().getTime() -  ( new Date().getTimezoneOffset() * 60000 ) )});
 
 
 
@@ -320,12 +320,7 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
 
-            return err;
-
-
-        });
 
 
     },
