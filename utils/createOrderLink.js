@@ -64,6 +64,7 @@ module.exports = {
 
            userIdWhoPayOrder: objParams.userIdWhoPayOrder.toString(),
            userId: objParams.userId.toString(),
+           videoSchedullingId: objParams.videoSchedullingId.toString()
 
 
 

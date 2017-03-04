@@ -218,6 +218,42 @@ module.exports = {
 
 
 
+    },
+
+
+
+    updateStatusPayVideo: function (objParams) {
+
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('schedulling');
+
+            const result = yield col.updateOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.idUserToNotification)}, {$set: {statusOfPayment: true}});
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+            return err;
+
+
+        });
+
+
+
+
     }
 
 

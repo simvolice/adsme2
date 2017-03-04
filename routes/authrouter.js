@@ -251,7 +251,7 @@ router.post('/login', function (req, res, next) {
 
 
 
-                res.json({"code": "ok", "sessionToken": jsonwebtoken.sign(result, config.SECRETJSONWEBTOKEN), "role": result.role});
+                res.json({"code": "ok", "sessionToken": jsonwebtoken.sign(result._id, config.SECRETJSONWEBTOKEN), "role": result.role});
 
 
             }else {

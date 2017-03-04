@@ -7,6 +7,7 @@ const PayFailService = require('../services/PayFailService');
 const PaySuccessService = require('../services/PaySuccessService');
 const NotificationService = require('../services/NotificationService');
 const UsersService = require('../services/UsersService');
+const SchedullingService = require('../services/SchedullingService');
 
 router.get('/paysuccess', function(req, res, next){
 
@@ -20,11 +21,15 @@ router.get('/paysuccess', function(req, res, next){
            messageOfNotification: "Добрый день, я успешно оплатил свой заказ, поэтому не забудьте запустить мою рекламу",
 
 
-           idUserToNotification: req.query.userId
+           idUserToNotification: req.query.userId,
+           videoSchedullingId: req.query.videoSchedullingId
 
 
        };
 
+
+
+       SchedullingService.updateStatusPayVideo(objParamsNotif);
 
        NotificationService.addNotification(objParamsNotif);
 
