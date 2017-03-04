@@ -251,7 +251,8 @@ router.post('/login', function (req, res, next) {
 
 
 
-                res.json({"code": "ok", "sessionToken": jsonwebtoken.sign(result._id, config.SECRETJSONWEBTOKEN), "role": result.role});
+                //TODO надо отдавать только ID пользователя, иначе нарушается целостность базы
+                res.json({"code": "ok", "sessionToken": jsonwebtoken.sign(result, config.SECRETJSONWEBTOKEN), "role": result.role});
 
 
             }else {
