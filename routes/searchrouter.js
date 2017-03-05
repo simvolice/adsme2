@@ -40,9 +40,9 @@ router.post('/getallcompany', function(req, res, next){
 
 });
 
-router.post('/getonecompany', function(req, res, next){
+router.get('/getonecompany', function(req, res, next){
 
-    SearchService.getOneCompany(req.body.id).then(function (result) {
+    SearchService.getOneCompany(req.query.id).then(function (result) {
 
         res.json({"code": "ok", "resultFromDb": result});
 
