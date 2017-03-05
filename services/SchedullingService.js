@@ -89,7 +89,7 @@ module.exports = {
             // Get the collection
             const col = db.collection('schedulling');
 
-            const result = yield   col.aggregate(
+            const result = yield col.aggregate(
                 [
 
                     { '$match': { "userId": ObjectId(userId) } },
@@ -106,9 +106,10 @@ module.exports = {
                     { '$unwind': '$video_url'},
 
 
-                    {
+                     {
                         '$addFields': {
-                            "video_url._id": "$_id"
+                            "video_url._id": "$_id",
+                            "video_url.statusOfEnableVideo": "$statusOfEnableVideo"
                         }
                     },
 

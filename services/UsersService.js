@@ -12,7 +12,6 @@ const ObjectId = require('mongodb').ObjectId;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
-const co = require('co');
 
 
 
@@ -21,24 +20,24 @@ module.exports = {
 
 
 
-    findOneUser: function (id) {
+    findOneUser: async function (id) {
 
 
 
-        return co(function*() {
+// Connection URL
+        let db = await MongoClient.connect(config.urlToMongoDBLinode);
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+        try {
 
 
-            // Get the collection
+
             const col = db.collection('users');
 
 
 
 
-            const result = yield col.findOne({_id: ObjectId(id)});
+            const result = await col.findOne({_id: ObjectId(id)});
 
 
 
@@ -48,18 +47,20 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
-            return err;
+    }catch (e){
 
 
-        });
+            db.close();
+            return e;
+
+
+        }
 
 
 
 
 
-    },
+    }
 
 
 
