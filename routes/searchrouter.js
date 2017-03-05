@@ -28,7 +28,17 @@ router.post('/searchcompany', function(req, res, next){
 
 
 
+router.post('/getallcompany', function(req, res, next){
 
+    SearchService.getAllCompany().then(function (result) {
+
+        res.json({"code": "ok", "resultFromDb": result});
+
+
+    });
+
+
+});
 
 
 
