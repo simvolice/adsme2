@@ -5,6 +5,7 @@
 const config = require('../utils/devConfig');
 
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
 
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
@@ -118,6 +119,56 @@ module.exports = {
 
                         }}]).toArray();
 
+
+
+
+            db.close();
+
+            return result;
+
+
+        }).catch(function (err) {
+
+            return err;
+
+
+        });
+
+
+    },
+
+
+
+    getOneCompany: function (id) {
+
+        return co(function*() {
+
+
+            // Connection URL
+            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+
+
+            // Get the collection
+            const col = db.collection('users');
+
+
+
+
+            const result = yield col.findOne({'_id': ObjectId(id)}, {
+
+
+
+                "nameOfCompany": 1,
+
+                "addressOfmonitor": 1,
+                "costOfSecond": 1,
+                "graphOfWork": 1,
+
+
+
+
+
+            });
 
 
 

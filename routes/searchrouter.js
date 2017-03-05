@@ -40,7 +40,16 @@ router.post('/getallcompany', function(req, res, next){
 
 });
 
+router.post('/getonecompany', function(req, res, next){
 
+    SearchService.getOneCompany(req.body.id).then(function (result) {
+
+        res.json({"code": "ok", "resultFromDb": result});
+
+
+    });
+
+});
 
 
 
