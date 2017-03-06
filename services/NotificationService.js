@@ -41,7 +41,8 @@ module.exports = {
                 messageOfNotification: objParams.messageOfNotification,
                 linkPay: objParams.linkPay,
                 dateOfNotification: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) ),
-                nameOfFromCompany: objParams.nameOfFromCompany
+                nameOfFromCompany: objParams.nameOfFromCompany,
+                statusRead: false
 
 
 
@@ -86,7 +87,48 @@ module.exports = {
 
 
 
-            const result = await col.find({userId: ObjectId(userId)}).sort([['dateOfNotification', -1]]).toArray();
+            const result = await col.find({userId: ObjectId(userId)}, {_id: 0, userId: 0}).sort([['dateOfNotification', -1]]).toArray();
+
+
+
+
+            db.close();
+
+            return result;
+
+
+        }catch(err) {
+            db.close();
+            return err;
+
+
+        }
+
+
+
+
+
+    },
+
+
+    updateStatusReadAllNotification: async function (userId) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+
+        try {
+
+
+
+
+            // Get the collection
+            const col = db.collection('notification');
+
+
+
+
+            const result = await col.updateMany({userId: ObjectId(userId)}, {'$set': {statusRead: true}});
 
 
 

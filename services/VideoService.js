@@ -36,7 +36,8 @@ module.exports = {
                 originalFileName: objParams.originalFileName,
                 mpdOutputFile: objParams.mpdOutputFile,
                 mp4OutputFile: objParams.mp4OutputFile,
-                userId: new ObjectId(objParams.userId)
+                userId: new ObjectId(objParams.userId),
+                createAt: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) )
 
 
 
@@ -82,7 +83,7 @@ module.exports = {
 
 
 
-            const result = await col.find({userId: ObjectId(id)}).toArray();
+            const result = await col.find({userId: ObjectId(id)}).sort([['createAt', -1]]).toArray();
 
 
 

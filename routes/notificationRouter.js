@@ -66,7 +66,24 @@ router.post('/getnotification', function(req, res, next){
 });
 
 
+router.post('/updatestatusnotification', function(req, res, next){
 
+
+    let userId = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id;
+
+
+    NotificationService.updateStatusReadAllNotification(userId).then(function (result) {
+
+
+        res.json({"code": "ok", "resultFromDb": result});
+
+
+    });
+
+
+
+
+});
 
 
 
