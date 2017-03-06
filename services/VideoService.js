@@ -10,29 +10,27 @@ const ObjectId = require('mongodb').ObjectId;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
-const co = require('co');
-
 
 
 
 module.exports = {
 
 
-    addvideo: function (objParams) {
+    addvideo: async function (objParams) {
 
 
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
             // Get the collection
             const col = db.collection('video');
 
 
 
 
-            const result = yield col.insertOne({
+            const result = await col.insertOne({
 
 
                 originalFileName: objParams.originalFileName,
@@ -53,28 +51,28 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
+        }catch(err) {
 
-
+            db.close();
             return err;
 
 
 
 
-        });
+        }
 
 
     },
 
 
-    getAllVideos: function (id) {
+    getAllVideos: async function (id) {
+
+        // Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
 
 
-        return co(function*() {
-
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -84,7 +82,7 @@ module.exports = {
 
 
 
-            const result = yield col.aggregate([
+            const result = await col.aggregate([
 
                 { '$match': {
 
@@ -133,12 +131,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
@@ -146,20 +144,20 @@ module.exports = {
 
 
 
-    deleteOneVideo: function (objParams) {
+    deleteOneVideo: async function (objParams) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
 
 
-        return co(function*() {
-
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
             const col = db.collection('video');
 
-            const result = yield col.deleteOne({_id: ObjectId(objParams.videoId), userId: ObjectId(objParams.userId)});
+            const result = await col.deleteOne({_id: ObjectId(objParams.videoId), userId: ObjectId(objParams.userId)});
 
 
 
@@ -168,12 +166,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 

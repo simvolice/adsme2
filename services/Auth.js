@@ -10,7 +10,7 @@ const Decimal128 = require('mongodb').Decimal128;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
-const co = require('co');
+
 
 
 
@@ -20,12 +20,16 @@ module.exports = {
 
 
 
-    registration: function (objParams) {
-
-        return co (function*() {
+    registration: async function (objParams) {
 
 
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+
+
+        try {
+
+
 
 
             // Get the collection
@@ -35,7 +39,7 @@ module.exports = {
 
 
 
-                const result = yield col.insertOne({
+                const result = await col.insertOne({
 
 
                     email: objParams.email,
@@ -84,16 +88,16 @@ module.exports = {
 
 
 
-        }).catch(function (err) {
+        }catch(err) {
 
 
 
-
+            db.close();
             return err;
 
 
 
-        });
+        }
 
 
 
@@ -101,21 +105,24 @@ module.exports = {
 
 
 
-    login: function (objParams) {
-
-        return co(function*() {
+    login: async function (objParams) {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
-            
+        // Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+
+        try {
+
+
+
 
             // Get the collection
             const col = db.collection('users');
 
 
 
-            const result = yield col.findOne({email: objParams.email});
+            const result = await col.findOne({email: objParams.email});
 
 
 
@@ -125,33 +132,33 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
     },
 
 
-    verifEmail: function (token) {
+    verifEmail: async function (token) {
+
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
 
 
-        return co(function*() {
 
 
-
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
-            
 
 
             const col = db.collection('users');
 
 
 
-            const result = yield col.findOneAndUpdate({activateToken: token}, {$set: {activateEmail: true}});
+            const result = await col.findOneAndUpdate({activateToken: token}, {$set: {activateEmail: true}});
 
 
 
@@ -165,12 +172,13 @@ module.exports = {
 
 
 
-        }).catch(function (err) {
+        }catch(err) {
+            db.close();
 
             return err;
 
 
-        });
+        }
 
 
 
@@ -179,13 +187,13 @@ module.exports = {
 
 
 
-    resetPassFindUser: function (email) {
+    resetPassFindUser: async function (email) {
+        // Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -193,7 +201,7 @@ module.exports = {
 
 
 
-            const result = yield col.findOne({email: email});
+            const result = await col.findOne({email: email});
 
 
 
@@ -204,12 +212,12 @@ module.exports = {
 
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
@@ -218,22 +226,22 @@ module.exports = {
     },
 
 
-    setNewPassword: function (objParams) {
+    setNewPassword: async function (objParams) {
+
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
 
 
-        return co(function*() {
 
 
-
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
-            
 
 
             const col = db.collection('users');
 
 
 
-            const result = yield col.findOneAndUpdate({activateToken: objParams.activateToken}, {$set: {password: objParams.pass}});
+            const result = await col.findOneAndUpdate({activateToken: objParams.activateToken}, {$set: {password: objParams.pass}});
 
 
 
@@ -247,32 +255,32 @@ module.exports = {
 
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
     },
 
-    verifToken: function (token) {
+    verifToken: async function (token) {
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
-            
+
 
             // Get the collection
             const col = db.collection('users');
 
 
 
-            const result = yield col.findOne({activateToken: token});
+            const result = await col.findOne({activateToken: token});
 
 
 
@@ -283,12 +291,12 @@ module.exports = {
 
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
@@ -305,6 +313,12 @@ module.exports = {
             // Connection URL
             const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
+            try {
+
+
+
+
+
 
             // Get the collection
             const col = db.collection('tokencsrf');
@@ -319,19 +333,24 @@ module.exports = {
 
             return result;
 
+    }catch(err) {
+                db.close();
+                return err;
 
+
+            }
 
 
 
     },
 
-    getCsrfToken: function (tokencsrf) {
+    getCsrfToken: async function (tokencsrf) {
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -339,7 +358,7 @@ module.exports = {
 
 
 
-            const result = yield col.findOne({tokencsrf: tokencsrf});
+            const result = await col.findOne({tokencsrf: tokencsrf});
 
 
 
@@ -348,18 +367,18 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
+        }catch(err) {
 
 
-
+            db.close();
 
             return err;
 
 
-        });
+        }
 
 
-    },
+    }
 
 
 };

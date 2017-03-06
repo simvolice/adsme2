@@ -13,7 +13,6 @@ const ObjectId = require('mongodb').ObjectId;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
-const co = require('co');
 
 
 
@@ -22,15 +21,15 @@ module.exports = {
 
 
 
-    saveFailPay: function (objParams) {
+    saveFailPay: async function (objParams) {
 
 
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -39,7 +38,7 @@ module.exports = {
 
 
 
-            const result = yield col.insertOne(objParams);
+            const result = await col.insertOne(objParams);
 
 
 
@@ -49,18 +48,18 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
 
 
-    },
+    }
 
 
 

@@ -8,8 +8,6 @@ const ObjectId = require('mongodb').ObjectId;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
-const co = require('co');
-
 
 
 
@@ -19,20 +17,20 @@ module.exports = {
 
 
 
-    getOnAirPlaylist: function (objParams) {
+    getOnAirPlaylist: async function (objParams) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
 
 
-        return co(function*() {
-
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
             const col = db.collection('schedulling');
 
-            const result = yield col.aggregate(
+            const result = await col.aggregate(
                 [ { '$match': {
 
 
@@ -91,12 +89,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 

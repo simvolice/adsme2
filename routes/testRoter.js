@@ -13,7 +13,7 @@ router.post('/testapi', function(req, res, next){
 
 
 
- UserService.findOneUser("58b301c1a953257721197b1f").then(function (result) {
+ UserService.findOneUser().then(function (result) {
 
 
      res.json({"code": "ok", "resultFromDb": result});

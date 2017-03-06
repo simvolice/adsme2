@@ -24,7 +24,7 @@ module.exports = {
 
 
 
-// Connection URL
+
         let db = await MongoClient.connect(config.urlToMongoDBLinode);
 
 

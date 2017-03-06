@@ -12,8 +12,6 @@ const Int32 = require('mongodb').Int32;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
-const co = require('co');
-
 
 
 
@@ -23,13 +21,13 @@ module.exports = {
 
 
 
-    addVideoToSchedulling: function (objParams) {
+    addVideoToSchedulling: async function (objParams) {
+        // Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -37,7 +35,7 @@ module.exports = {
 
 
 
-            const result = yield col.insertOne({
+            const result = await col.insertOne({
 
                 userId: ObjectId(objParams.userId),
                 videoId: ObjectId(objParams.videoId),
@@ -60,12 +58,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
     },
@@ -75,21 +73,21 @@ module.exports = {
 
 
 
-    getallvideoforscreenholder: function (userId) {
+    getallvideoforscreenholder: async function (userId) {
+
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+
+        try {
 
 
 
-        return co(function*() {
-
-
-
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
             const col = db.collection('schedulling');
 
-            const result = yield col.aggregate(
+            const result = await col.aggregate(
                 [
 
                     { '$match': { "userId": ObjectId(userId) } },
@@ -137,14 +135,14 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
+        }catch(err) {
 
 
-
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
@@ -154,20 +152,20 @@ module.exports = {
 
 
 
-    deleteOneSchedullingVideo: function (objParams) {
+    deleteOneSchedullingVideo: async function (objParams) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
 
 
-        return co(function*() {
-
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
             const col = db.collection('schedulling');
 
-            const result = yield col.deleteOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)});
+            const result = await col.deleteOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)});
 
 
 
@@ -176,32 +174,32 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
     },
 
 
-    setEnableVideoInSchedulling: function (objParams) {
+    setEnableVideoInSchedulling: async function (objParams) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
 
 
-        return co(function*() {
-
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
             const col = db.collection('schedulling');
 
-            const result = yield col.updateOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)}, {$set: {statusOfEnableVideo: true}});
+            const result = await col.updateOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)}, {$set: {statusOfEnableVideo: true}});
 
 
 
@@ -210,12 +208,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
@@ -223,20 +221,20 @@ module.exports = {
 
 
 
-    updateStatusPayVideo: function (objParams) {
+    updateStatusPayVideo: async function (objParams) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
 
 
-        return co(function*() {
-
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
             const col = db.collection('schedulling');
 
-            const result = yield col.updateOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.idUserToNotification)}, {$set: {statusOfPayment: true}});
+            const result = await col.updateOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.idUserToNotification)}, {$set: {statusOfPayment: true}});
 
 
 
@@ -245,12 +243,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 

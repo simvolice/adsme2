@@ -8,7 +8,6 @@ const ObjectId = require('mongodb').ObjectId;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
-const co = require('co');
 
 
 
@@ -18,15 +17,15 @@ module.exports = {
 
 
 
-    addNotification: function (objParams) {
+    addNotification: async function (objParams) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
 
+        try {
 
-        return co(function*() {
 
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -35,7 +34,7 @@ module.exports = {
 
 
 
-            const result = yield col.insertOne({
+            const result = await col.insertOne({
 
                 userId: ObjectId(objParams.idUserToNotification),
 
@@ -56,12 +55,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 
@@ -70,15 +69,15 @@ module.exports = {
     },
 
 
-    getNotification: function (userId) {
+    getNotification: async function (userId) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
 
+        try {
 
-        return co(function*() {
 
-
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -87,7 +86,7 @@ module.exports = {
 
 
 
-            const result = yield col.find({userId: ObjectId(userId)}).sort([['dateOfNotification', -1]]).toArray();
+            const result = await col.find({userId: ObjectId(userId)}).sort([['dateOfNotification', -1]]).toArray();
 
 
 
@@ -97,12 +96,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
 

@@ -10,7 +10,6 @@ const ObjectId = require('mongodb').ObjectId;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
-const co = require('co');
 
 
 
@@ -24,13 +23,13 @@ module.exports = {
 
 
 
-    searchCompany: function (searchQuery) {
+    searchCompany: async function (searchQuery) {
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -39,7 +38,7 @@ module.exports = {
 
 
 
-            const result = yield col.aggregate(
+            const result = await col.aggregate(
                 [ { '$match': { '$text': {'$search' : searchQuery, '$language': 'ru'} } },
 
                     {
@@ -69,12 +68,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
     },
@@ -82,13 +81,13 @@ module.exports = {
 
 
 
-    getAllCompany: function () {
+    getAllCompany: async function () {
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -97,7 +96,7 @@ module.exports = {
 
 
 
-            const result = yield col.aggregate(
+            const result = await col.aggregate(
                 [ { '$match': { 'role': "screenHolder" } },
 
                     {
@@ -127,25 +126,25 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
     },
 
 
 
-    getOneCompany: function (id) {
+    getOneCompany: async function (id) {
+        // Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
-        return co(function*() {
+        try {
 
 
-            // Connection URL
-            const db = yield MongoClient.connect(config.urlToMongoDBLinode);
 
 
             // Get the collection
@@ -154,7 +153,7 @@ module.exports = {
 
 
 
-            const result = yield col.findOne({'_id': ObjectId(id)}, {
+            const result = await col.findOne({'_id': ObjectId(id)}, {
 
 
 
@@ -177,12 +176,12 @@ module.exports = {
             return result;
 
 
-        }).catch(function (err) {
-
+        }catch(err) {
+            db.close();
             return err;
 
 
-        });
+        }
 
 
     }
