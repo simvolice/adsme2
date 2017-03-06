@@ -82,7 +82,49 @@ module.exports = {
 
 
 
-            const result = yield col.find({userId: ObjectId(id)}).toArray();
+
+
+            const result = yield col.aggregate([
+
+                { '$match': {
+
+
+                    "userId": ObjectId(id)
+
+
+
+
+                } },
+
+                { '$lookup': {
+                    'from': "schedulling",
+                    'localField': "_id",
+                    'foreignField': "videoId",
+                    'as': "status_videos"
+                }},
+
+                { '$unwind': '$status_videos'},
+
+                { '$project' : {
+
+
+
+                    "status_videos._id": 0,
+                    "status_videos.userId": 0,
+                    "status_videos.videoId": 0,
+                    "status_videos.dateOfShowVideo": 0,
+                    "status_videos.statusOfPayment": 0,
+                    "status_videos.statusOfPlayToEnd": 0,
+
+
+
+
+
+                }}
+
+
+
+            ]).toArray();
 
 
 
