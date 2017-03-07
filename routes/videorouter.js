@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-var Busboy = require('busboy');
+const Busboy = require('busboy');
 const jsonwebtoken = require('jsonwebtoken');
 const spawn = require('child_process').spawn;
 
@@ -10,6 +10,9 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 const config = require('../utils/devConfig');
+
+
+
 
 const VideoService = require('../services/VideoService');
 
@@ -27,13 +30,86 @@ function getRandomInt(min, max) {
 
 
 
+function createPoster(pathToFile, pathToOutPng, originalFileName, nameOfMpdDir, nameOfMpdFileForDB, lengthVideoInSecond, req, res) {
+
+
+    let outPutPngPoster = pathToOutPng + getRandomInt(1, 1000000) + '.png';
+
+
+
+    const ffmpeg = spawn(config.pathToFFmpegWindows, ['-i', pathToFile, '-ss', '00:00:10', '-vframes', '1', outPutPngPoster]);
+
+
+
+
+
+    ffmpeg.stderr.on('data', (data) => {
+        console.log("\x1b[41m", data.toString());
+    });
+
+
+
+    ffmpeg.on('close', (code) => {
+
+        if (code == 0) {
+
+
+
+            //Удаляем сконвертированный файл
+            fs.unlinkSync(pathToFile);
+
+
+
+
+            let objParams = {
+
+                originalFileName: originalFileName,
+                mpdOutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '.mpd',
+                mp4OutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '_dashinit.mp4',
+                userId: jsonwebtoken.verify(req.get('sessionToken'), config.SECRETJSONWEBTOKEN)._id,
+                lengthVideoInSecond: lengthVideoInSecond,
+                linkToPoster: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + path.parse(outPutPngPoster).base,
+
+
+
+            };
+
+
+
+            VideoService.addvideo(objParams).then(function (result) {
+
+
+                console.log("\x1b[43m", result);
+
+
+            });
+
+
+
+            return res.json({"code": code});
+
+
+        }else {
+
+            console.log("\x1b[45m", code);
+
+            return res.json({"code": code});
+
+
+        }
+
+
+    });
+
+
+}
 
 
 
 /*
 Отправка на нарезку потоков DASH, в MP4Box
  */
-function sendToPackager(pathToFile, res, originalFileName, req) {
+function sendToPackager(pathToFile, res, originalFileName, req, lengthVideoInSecond) {
 
 
 
@@ -66,32 +142,14 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
         if (code == 0) {
 
 
-            //Удаляем сконвертированный файл
-            fs.unlinkSync(pathToFile);
-
-            let objParams = {
-
-                originalFileName: originalFileName,
-                mpdOutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '.mpd',
-                mp4OutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '_dashinit.mp4',
-                userId: jsonwebtoken.verify(req.get('sessionToken'), config.SECRETJSONWEBTOKEN)._id
 
 
-            };
+           createPoster(pathToFile, pathToMPD + path.sep, originalFileName, nameOfMpdDir, nameOfMpdFileForDB, lengthVideoInSecond, req, res);
 
 
 
-            VideoService.addvideo(objParams).then(function (result) {
 
 
-                console.log("\x1b[43m", result);
-
-
-            });
-
-
-
-            return res.json({"code": code});
 
         }else {
 
@@ -114,6 +172,78 @@ function sendToPackager(pathToFile, res, originalFileName, req) {
 
 
 }
+
+
+/**
+ * Получить длительность видео в секундах
+ * @param pathToFile
+ * @param res
+ * @param originalFileName
+ * @param req
+ */
+function getLength(pathToFile, res, originalFileName, req) {
+
+
+    var tempObjForResult = null;
+    var tempStrForJSON = '';
+    const ffprobe = spawn(config.pathToFFprobeWindows, ['-print_format', 'json', '-show_entries', 'format=duration', pathToFile]);
+
+    ffprobe.stdout.on('data', function (data) {
+
+        tempStrForJSON += data;
+
+    });
+
+
+
+
+
+    ffprobe.stdout.on('close', (code) => {
+
+
+
+        if (code == false) {
+
+
+
+
+
+            tempObjForResult = JSON.parse(tempStrForJSON);
+
+            let tempSecondFromStr = parseFloat(tempObjForResult.format.duration);
+
+
+
+            sendToPackager(pathToFile, res, originalFileName, req, tempSecondFromStr.toFixed());
+
+
+
+
+
+
+
+        } else {
+
+
+            return res.json({"code": "detectLegthError"});
+
+
+
+        }
+
+    });
+
+
+
+
+
+}
+
+
+
+
+
+
 
 /*
 Отправка на ковертацию в ffmpeg
@@ -142,8 +272,12 @@ function sendToConvert(pathToFile, res, req, originalFileName) {
 
             //Удаляем загруженный файл с клиента
             fs.unlinkSync(pathToFile);
-            console.log("\x1b[41m", code);
-            sendToPackager(outPutMp4File, res, originalFileName, req);
+
+
+            getLength(outPutMp4File, res, originalFileName, req);
+
+
+
 
 
 

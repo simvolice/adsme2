@@ -7,6 +7,7 @@ const config = require('../utils/devConfig');
 
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
+const Int32 = require('mongodb').Int32;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
@@ -37,7 +38,9 @@ module.exports = {
                 mpdOutputFile: objParams.mpdOutputFile,
                 mp4OutputFile: objParams.mp4OutputFile,
                 userId: new ObjectId(objParams.userId),
-                createAt: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) )
+                createAt: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) ),
+                lengthVideoInSecond: Int32(objParams.lengthVideoInSecond),
+                linkToPoster: objParams.linkToPoster
 
 
 

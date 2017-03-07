@@ -6,7 +6,7 @@ const config = require('../utils/devConfig');
 const MongoClient = require('mongodb').MongoClient;
 const Decimal128 = require('mongodb').Decimal128;
 
-
+const getPercent = require('../utils/percent');
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
@@ -58,7 +58,8 @@ module.exports = {
 
                     addressOfmonitor: objParams.addressOfmonitor,
 
-                    costOfSecond: Decimal128.fromString(objParams.costOfSecond || "0.00"),
+                    costOfSecond: Decimal128.fromString(objParams.costOfSecond + ".00" || "0.00"),
+                    totalCost: Decimal128.fromString(getPercent.percentage(objParams.costOfSecond || 0, 6.8)),
                     graphOfWork: objParams.graphOfWork,
 
                     numberOfBankCard: objParams.numberOfBankCard,

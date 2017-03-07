@@ -9,6 +9,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const OrderService = require('../services/OrderService');
 const NotificationService = require('../services/NotificationService');
 const createOrderLink = require('../utils/createOrderLink');
+const UsersService = require('../services/UsersService');
 
 router.post('/setnewvideotoscheduling', function(req, res, next){
 
@@ -142,16 +143,20 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
         videoSchedullingId: req.body.videoSchedullingId,
         userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id,
-        nameOfCompany: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN).nameOfCompany,
 
         userIdWhoPayOrder: req.body.userId,
-        Amount: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN).costOfSecond.$numberDecimal
 
 
 
     };
 
 
+    UsersService.findOneUser(objParams.userId).then(function (result) {
+
+        objParams.nameOfCompany = result.nameOfCompany;
+        objParams.Amount = result.costOfSecond.$numberDecimal;
+
+    });
 
 
     SchedullingService.setEnableVideoInSchedulling(objParams).then(function (result) {

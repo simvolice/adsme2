@@ -5,7 +5,8 @@
 
 const express = require('express');
 const router = express.Router();
-const UserService = require('../services/UsersService');
+
+const UsersService = require('../services/UsersService');
 
 
 
@@ -13,13 +14,9 @@ router.post('/testapi', function(req, res, next){
 
 
 
- UserService.findOneUser().then(function (result) {
-
-
-     res.json({"code": "ok", "resultFromDb": result});
-
-    });
-
+  UsersService.findOneUser("58b301c1a953257721197b1f").then(function (result) {
+       res.json({"code": "ok", "resultFromDb": result});
+   });
 
 
 
