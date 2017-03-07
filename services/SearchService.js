@@ -51,7 +51,7 @@ module.exports = {
                             "nameOfCompany": 1,
 
                             "addressOfmonitor": 1,
-                            "costOfSecond": 1,
+                            "totalCost": 1,
                             "graphOfWork": 1,
 
 
@@ -109,7 +109,7 @@ module.exports = {
                             "nameOfCompany": 1,
 
                             "addressOfmonitor": 1,
-                            "costOfSecond": 1,
+                            "totalCost": 1,
                             "graphOfWork": 1,
 
 
@@ -160,7 +160,7 @@ module.exports = {
                 "nameOfCompany": 1,
 
                 "addressOfmonitor": 1,
-                "costOfSecond": 1,
+                "totalCost": 1,
                 "graphOfWork": 1,
 
 

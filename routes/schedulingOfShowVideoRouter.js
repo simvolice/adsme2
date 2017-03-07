@@ -10,14 +10,27 @@ const OrderService = require('../services/OrderService');
 const NotificationService = require('../services/NotificationService');
 const createOrderLink = require('../utils/createOrderLink');
 const UsersService = require('../services/UsersService');
+const AmountService = require('../services/AmountService');
 
+
+
+
+
+
+
+
+
+
+/**
+ * Здесь Ипешник, нажимает на календарь, чтобы выбрать дату
+ */
 router.post('/setnewvideotoscheduling', function(req, res, next){
 
 
 
     let objParams = {
 
-       userId: req.body.userId,
+       userIdScreenHolder: req.body.userId,
        videoId: req.body.videoId,
         dateOfShowVideo: req.body.dateOfShowVideo
 
@@ -26,15 +39,19 @@ router.post('/setnewvideotoscheduling', function(req, res, next){
 
     };
 
+    AmountService.getTotalSum(objParams).then(function (result) {
 
 
-    SchedullingService.addVideoToSchedulling(objParams).then(function (result) {
 
 
         res.json({"code": "ok", "resultFromDb": result});
 
 
+
+
     });
+
+
 
 
 
@@ -114,7 +131,7 @@ function createLinkForPay(objParams) {
         };
 
 
-        console.log("\x1b[41m", createOrderLink.newLink(result.ops[0]));
+        console.log("\x1b[41m", objParamsNotif.linkPay);
 
 
         NotificationService.addNotification(objParamsNotif);
@@ -154,9 +171,17 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
     UsersService.findOneUser(objParams.userId).then(function (result) {
 
         objParams.nameOfCompany = result.nameOfCompany;
-        objParams.Amount = result.costOfSecond.$numberDecimal;
+
 
     });
+
+
+    SchedullingService.getOneSchedullingVideo(objParams).then(function (result) {
+
+        objParams.Amount = result.amountResult.toString();
+
+    });
+
 
 
     SchedullingService.setEnableVideoInSchedulling(objParams).then(function (result) {

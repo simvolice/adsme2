@@ -21,8 +21,14 @@ module.exports = {
 
 
 
-    addVideoToSchedulling: async function (objParams) {
-        // Connection URL
+
+
+
+
+
+    getOneSchedullingVideo: async function (objParams) {
+
+// Connection URL
         const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
         try {
@@ -33,23 +39,7 @@ module.exports = {
             // Get the collection
             const col = db.collection('schedulling');
 
-
-
-            const result = await col.insertOne({
-
-                userId: ObjectId(objParams.userId),
-                videoId: ObjectId(objParams.videoId),
-                dateOfShowVideo: objParams.dateOfShowVideo,
-
-                statusOfEnableVideo: false,
-                statusOfPayment: false,
-                statusOfPlayToEnd: Int32(0)
-
-
-
-
-
-            });
+            const result = await col.findOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)});
 
 
 
@@ -66,11 +56,8 @@ module.exports = {
         }
 
 
+
     },
-
-
-
-
 
 
     getallvideoforscreenholder: async function (userId) {
