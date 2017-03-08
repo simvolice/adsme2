@@ -11,7 +11,18 @@ const jsonwebtoken = require('jsonwebtoken');
 
 
 
+router.post('/savecountvideo', function(req, res, next){
 
+
+
+    OnairService.updateStatusPlayingVideo(req.body._id).then(function (result) {
+        res.json({"code": "ok", "resultFromDb": result});
+    });
+
+
+
+
+});
 
 
 

@@ -5,6 +5,7 @@ const config = require('../utils/devConfig');
 
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
+const Int32 = require('mongodb').Int32;
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
@@ -14,6 +15,43 @@ Logger.setLevel('debug');
 module.exports = {
 
 
+
+    updateStatusPlayingVideo: async function (id) {
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
+
+
+
+
+            // Get the collection
+            const col = db.collection('schedulling');
+
+
+
+
+            const result = await col.updateOne({_id: ObjectId(id)}, {$inc: {statusOfPlayToEnd: Int32(1)}});
+
+
+
+
+            db.close();
+
+            return result;
+
+
+        }catch(err) {
+            db.close();
+            return err;
+
+
+        }
+
+
+
+    },
 
 
 
@@ -55,6 +93,15 @@ module.exports = {
 
                     { '$unwind': '$video_url'},
 
+
+                    {
+                        '$addFields': {
+                            "video_url._id": "$_id"
+
+                        }
+                    },
+
+
                     {
                         '$replaceRoot': { 'newRoot': "$video_url" }
                     },
@@ -65,7 +112,10 @@ module.exports = {
 
 
                         "userId": 0,
-                        "originalFileName": 0
+                        "originalFileName": 0,
+                        "linkToPoster": 0,
+                        "lengthVideoInSecond": 0,
+                        "createAt": 0
 
 
 
