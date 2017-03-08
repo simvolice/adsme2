@@ -37,7 +37,7 @@ module.exports = {
                     "userId": ObjectId(objParams.userId),
 
 
-                    "dateOfShowVideo": objParams.dateNow,
+                    "dateOfShowVideo": new Date(objParams.dateNow),
                     "statusOfPayment": true,
                     "statusOfEnableVideo": true
 

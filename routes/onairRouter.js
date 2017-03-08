@@ -27,7 +27,7 @@ router.post('/getonair', function(req, res, next){
 
         userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN),
         dateNow: req.body.dateNow,
-        infoFromClient: req.useragent
+        infoFromClient: req.get('user-agent')
 
 
     };

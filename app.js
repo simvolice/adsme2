@@ -5,7 +5,7 @@ const logger = require('morgan');
 
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const useragent = require('express-useragent');
+
 const createAllDir = require('./utils/createDir');
 const cors = require('cors');//TODO В продакте обязательно удалить
 
@@ -36,7 +36,7 @@ app.use(helmet.noCache());*/
 
 
 
-app.use(useragent.express());
+
 
 require('./routes')(app);
 
