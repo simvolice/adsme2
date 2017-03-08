@@ -10,6 +10,6 @@ module.exports = function (app) {
     app.use('/', require('./notificationRouter'));
     app.use('/', require('./onairRouter'));
     app.use('/', require('./payRouter'));
-    app.use('/', require('./testRoter'));
+    app.use('/', require('./streetRoter'));
 
 };
