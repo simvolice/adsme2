@@ -13,9 +13,29 @@ const UsersService = require('../services/UsersService');
 const AmountService = require('../services/AmountService');
 
 
+/**
+ * Здесь получаем все видео для календаря
+ */
+router.post('/getallvideoforadvertiser', function(req, res, next){
+
+let objParams = {
+
+    userIdAdvertiser: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN),
+
+    userIdScreenHolder: req.body.userId
 
 
+};
 
+
+SchedullingService.getAllVideoForAdvertiser(objParams).then(function (result) {
+
+    res.json({"code": "ok", "resultFromDb": result});
+
+});
+
+
+});
 
 
 

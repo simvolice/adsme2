@@ -24,6 +24,98 @@ module.exports = {
 
 
 
+    getAllVideoForAdvertiser: async function (objParams) {
+
+
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
+
+
+
+
+            const colVideo = db.collection('video');
+
+            const result = await colVideo.aggregate(
+                [
+
+                    { '$match': { "userId": ObjectId(objParams.userIdAdvertiser) } },
+
+
+                    { '$lookup': {
+                        'from': "schedulling",
+                        'localField': "_id",
+                        'foreignField': "videoId",
+                        'as': "schedulling_info"
+                    }},
+
+
+                    { '$unwind': '$schedulling_info'},
+
+
+
+                    {
+                        '$addFields': {
+                            "schedulling_info.originalFileName": "$originalFileName"
+
+                        }
+                    },
+
+
+
+                    {
+                        '$replaceRoot': { 'newRoot': "$schedulling_info" }
+                    },
+
+
+
+                    { '$match': { "userId": ObjectId(objParams.userIdScreenHolder) } },
+
+
+
+                    { '$project' : {
+
+
+
+                        "amountResult": 1,
+                        "dateOfShowVideo": 1,
+                        "_id": 0,
+                        "originalFileName": 1
+
+
+
+
+
+                    }}
+
+
+
+
+
+
+
+
+
+                ]).toArray();
+
+
+
+
+            db.close();
+
+            return result;
+
+
+        }catch(err) {
+            db.close();
+            return err;
+
+
+        }
+
+
+
+    },
 
 
 
