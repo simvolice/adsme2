@@ -28,16 +28,35 @@ router.post('/setnewvideotoscheduling', function(req, res, next){
 
 
 
+
     let objParams = {
 
        userIdScreenHolder: req.body.userId,
+        idUserToNotification: req.body.userId,
        videoId: req.body.videoId,
-        dateOfShowVideo: req.body.dateOfShowVideo
+        dateOfShowVideo: req.body.dateOfShowVideo,
+       userId : jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN),
+        messageOfNotification: "Добрый день, к Вам поступила новая заявка на размещение видео ролика на Вашем экране, пожалуйста проверьте свой плэйлист"
 
 
 
 
     };
+
+
+    UsersService.findOneUser(objParams.userId).then(function (result) {
+
+        objParams.nameOfFromCompany = result.nameOfCompany;
+
+        NotificationService.addNotification(objParams);
+
+
+
+    });
+
+
+
+
 
     AmountService.getTotalSum(objParams).then(function (result) {
 
@@ -59,6 +78,7 @@ router.post('/setnewvideotoscheduling', function(req, res, next){
 
 
 
+
 });
 
 
@@ -71,7 +91,7 @@ router.post('/getallvideoforscreenholder', function(req, res, next){
 
 
 
-    let userId = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id;
+    let userId = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN);
 
     SchedullingService.getallvideoforscreenholder(userId).then(function (result) {
 
@@ -94,7 +114,7 @@ router.post('/deleteoneschedullingvideo', function(req, res, next){
 
 
         videoSchedullingId: req.body.videoSchedullingId,
-        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id
+        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)
 
 
 
@@ -159,7 +179,7 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
 
         videoSchedullingId: req.body.videoSchedullingId,
-        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id,
+        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN),
 
         userIdWhoPayOrder: req.body.userId,
 

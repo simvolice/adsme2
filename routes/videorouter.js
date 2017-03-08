@@ -570,7 +570,7 @@ router.post('/addvideo', function(req, res, next){
 router.post('/getallvideos', function(req, res, next){
 
 
-    let id = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id;
+    let id = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN);
 
     VideoService.getAllVideos(id).then(function (result) {
 
@@ -594,7 +594,7 @@ router.post('/deleteonevideo', function(req, res, next){
 
     let objParams = {
 
-        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id,
+        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN),
         videoId: req.body.videoId
 
     };

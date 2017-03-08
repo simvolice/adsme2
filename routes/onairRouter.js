@@ -25,7 +25,7 @@ router.post('/getonair', function(req, res, next){
 
     let objParams = {
 
-        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id,
+        userId: jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN),
         dateNow: req.body.dateNow,
         infoFromClient: req.useragent
 

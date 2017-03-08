@@ -16,7 +16,7 @@ const jsonwebtoken = require('jsonwebtoken');
 router.post('/getnotification', function(req, res, next){
 
 
-    let userId = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id;
+    let userId = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN);
 
 
     NotificationService.getNotification(userId).then(function (result) {
@@ -36,7 +36,7 @@ router.post('/getnotification', function(req, res, next){
 router.post('/updatestatusnotification', function(req, res, next){
 
 
-    let userId = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN)._id;
+    let userId = jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN);
 
 
     NotificationService.updateStatusReadAllNotification(userId).then(function (result) {

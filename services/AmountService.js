@@ -39,7 +39,7 @@ module.exports = {
             const result = await col.findOne({_id: ObjectId(objParams.userIdScreenHolder)});
 
 
-            const resultVideo = await colVideo.findOne({_id: ObjectId(objParams.videoId) });
+            const resultVideo = await colVideo.findOne({_id: ObjectId(objParams.videoId), userId: ObjectId(objParams.userId) });
 
 
 
@@ -51,7 +51,7 @@ module.exports = {
 
                 userId: ObjectId(objParams.userIdScreenHolder),
                 videoId: ObjectId(objParams.videoId),
-                dateOfShowVideo: objParams.dateOfShowVideo,
+                dateOfShowVideo: new Date(objParams.dateOfShowVideo),
 
                 statusOfEnableVideo: false,
                 statusOfPayment: false,

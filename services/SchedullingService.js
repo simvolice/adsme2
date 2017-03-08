@@ -4,6 +4,7 @@
 
 
 const config = require('../utils/devConfig');
+const NotificationService = require('../services/NotificationService');
 
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
@@ -151,6 +152,31 @@ module.exports = {
 
             // Get the collection
             const col = db.collection('schedulling');
+            const colVideo = db.collection('video');
+            const colUsers = db.collection('users');
+
+
+
+            const resultForNotif = await col.findOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)});
+
+
+            const resultFromVideo = await colVideo.findOne({_id: ObjectId(resultForNotif.videoId)});
+
+            const resultFromUsers = await colUsers.findOne({_id: ObjectId(resultFromVideo.userId)});
+            const resultForFromCompany = await colUsers.findOne({_id: ObjectId(objParams.userId)});
+
+            let objParamsNotif = {
+
+                idUserToNotification: resultFromUsers._id,
+                messageOfNotification: "Добрый день, мы сожалеем, но Ваше видео не устроило владельца экрана, попробуйте выбрать другой экран, либо измените содержимое Вашего видео",
+                nameOfFromCompany: resultForFromCompany.nameOfCompany
+
+            };
+
+
+            NotificationService.addNotification(objParamsNotif);
+
+
 
             const result = await col.deleteOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)});
 
