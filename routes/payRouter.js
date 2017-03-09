@@ -41,7 +41,8 @@ router.get('/paysuccess', function(req, res, next){
 
 
 
-    res.sendStatus(200);
+
+    res.redirect('/cabinet-advertiser');
 
 });
 
@@ -103,7 +104,8 @@ router.get('/payfail', function(req, res, next){
 
 
 
-    res.sendStatus(200);
+
+    res.redirect('/cabinet-advertiser');
 
 });
 
