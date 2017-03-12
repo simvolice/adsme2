@@ -32,8 +32,6 @@ module.exports = {
             const col = db.collection('notification');
 
 
-
-
             const result = await col.insertOne({
 
                 userId: ObjectId(objParams.idUserToNotification),
@@ -87,7 +85,7 @@ module.exports = {
 
 
 
-            const result = await col.find({userId: ObjectId(userId)}, {_id: 0, userId: 0}).sort([['dateOfNotification', -1]]).toArray();
+            const result = await col.find({userId: ObjectId(userId), statusRead: false}, {_id: 0, userId: 0}).sort([['dateOfNotification', -1]]).limit(5).toArray();
 
 
 
