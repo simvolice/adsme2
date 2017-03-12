@@ -80,7 +80,8 @@ module.exports = {
                         "amountResult": 1,
                         "dateOfShowVideo": 1,
                         "_id": 0,
-                        "originalFileName": 1
+                        "originalFileName": 1,
+                        "statusOfPlayToEnd": 1
 
 
 
