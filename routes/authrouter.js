@@ -112,12 +112,38 @@ function checkRegisterData(req, res) {
 
 
 
+router.use(function (req, res, next) {
+
+    AuthService.testConnection().then(function (result) {
+
+        if (result.name == "MongoError") {
+
+
+            res.json(result);
+
+
+        } else {
+
+
+            next();
+
+
+        }
+
+
+    });
+
+
+});
+
+
 
 
 /**
  * Идет проверка по токену. Берем из базы и сверяем его.
  */
 router.use(function (req, res, next) {
+
 
 
 

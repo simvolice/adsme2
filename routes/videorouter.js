@@ -184,8 +184,8 @@ function sendToPackager(pathToFile, res, originalFileName, req, lengthVideoInSec
 function getLength(pathToFile, res, originalFileName, req) {
 
 
-    var tempObjForResult = null;
-    var tempStrForJSON = '';
+    let tempObjForResult = null;
+    let tempStrForJSON = '';
     const ffprobe = spawn(config.pathToFFprobeWindows, ['-print_format', 'json', '-show_entries', 'format=duration', pathToFile]);
 
     ffprobe.stdout.on('data', function (data) {
@@ -393,8 +393,8 @@ function checkOnlyFormatOfVideo(tempObjForResult, res) {
 function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
-    var tempObjForResult = null;
-    var tempStrForJSON = '';
+    let tempObjForResult = null;
+    let tempStrForJSON = '';
     const ffprobe = spawn(config.pathToFFprobeWindows, ['-print_format', 'json', '-show_entries', 'stream=height,codec_name,codec_type', '-show_entries', 'format=format_name', pathToFile]);
 
     ffprobe.stdout.on('data', function (data) {
@@ -457,8 +457,8 @@ function uploadFile(req, res, sizeFile) {
 
 
 
-    var saveTo = '';
-    var busboy = new Busboy({ headers: req.headers, limits: {fileSize: sizeFile} });
+    let saveTo = '';
+    let busboy = new Busboy({ headers: req.headers, limits: {fileSize: sizeFile} });
     let originalFileName = '';
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         originalFileName = path.parse(filename).name;

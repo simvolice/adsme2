@@ -379,6 +379,29 @@ module.exports = {
         }
 
 
+    },
+
+
+    testConnection: async function(){
+
+
+        try {
+
+            const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+            return db;
+
+        }catch (err){
+
+            return err;
+
+
+        }
+
+
+
+
+
     }
 
 
