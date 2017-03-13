@@ -38,7 +38,7 @@ module.exports = {
 
 
 
-            const result = await col.find({}, {_id: 0}).toArray();
+            const result = await col.find({}).toArray();
 
 
 
