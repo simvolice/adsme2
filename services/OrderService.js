@@ -68,6 +68,49 @@ module.exports = {
 
 
 
+    },
+
+
+
+
+    getOneOrder: async function (id) {
+
+
+// Connection URL
+        const db = await MongoClient.connect(config.urlToMongoDBLinode);
+
+        try {
+
+
+
+
+            // Get the collection
+            const col = db.collection('orders');
+
+
+
+
+            const result = await col.findOne({_id: ObjectId(id)});
+
+
+
+
+            db.close();
+
+            return result;
+
+
+        }catch(err) {
+            db.close();
+            return err;
+
+
+        }
+
+
+
+
+
     }
 
 

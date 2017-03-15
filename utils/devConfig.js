@@ -34,8 +34,8 @@ if (process.env.DEPLOY == 'dev') {
 
 
 
-        MerchantId: '76023',
-        PrivateSecurityKey: 'ffe62eec-6371-44d9-9a9e-84da888b067b'
+        MerchantId: '500136',
+        PrivateSecurityKey: '9tegSggXIbdiJkMi'
 
 
 
@@ -69,8 +69,8 @@ if (process.env.DEPLOY == 'dev') {
         pathToTempVideoDir : os.tmpdir() + '/tmpVideoAdsMe/',
 
 
-        MerchantId: '76023',
-        PrivateSecurityKey: 'ffe62eec-6371-44d9-9a9e-84da888b067b'
+        MerchantId: '500136',
+        PrivateSecurityKey: '9tegSggXIbdiJkMi'
 
 
 

@@ -154,8 +154,6 @@ router.post('/deleteoneschedullingvideo', function(req, res, next){
 function createLinkForPay(objParams) {
 
 
-
-
     OrderService.createOrder(objParams).then(function (result) {
 
 
@@ -207,7 +205,6 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
     };
 
-
     UsersService.findOneUser(objParams.userId).then(function (result) {
 
         objParams.nameOfCompany = result.nameOfCompany;
@@ -218,23 +215,27 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
     SchedullingService.getOneSchedullingVideo(objParams).then(function (result) {
 
+
+
         objParams.Amount = result.amountResult.toString();
 
     });
 
 
 
+
+
     SchedullingService.setEnableVideoInSchedulling(objParams).then(function (result) {
 
+        createLinkForPay(objParams);
+
+        res.json({"code": "ok"});
+
+
+        /*if (result.result.nModified == 1) {
 
 
 
-        if (result.result.nModified == 1) {
-
-
-            createLinkForPay(objParams);
-
-            res.json({"code": "ok"});
 
 
         } else {
@@ -243,8 +244,7 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
 
 
-        }
-
+        }*/
 
 
 

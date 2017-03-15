@@ -59,7 +59,7 @@ module.exports = {
                     addressOfmonitor: objParams.addressOfmonitor,
 
                     costOfSecond: Decimal128.fromString(objParams.costOfSecond + ".00" || "0.00"),
-                    totalCost: Decimal128.fromString(getPercent.percentage(objParams.costOfSecond || 0, 6.8)),
+                    totalCost: Decimal128.fromString(getPercent.percentage(objParams.costOfSecond || 0, 6.9)),
                     graphOfWork: objParams.graphOfWork,
 
                     numberOfBankCard: objParams.numberOfBankCard,
@@ -385,10 +385,15 @@ module.exports = {
     testConnection: async function(){
 
 
+
+
         try {
+
+
 
             const db = await MongoClient.connect(config.urlToMongoDBLinode);
 
+            db.close();
             return db;
 
         }catch (err){

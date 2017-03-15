@@ -4,8 +4,9 @@
 
 const config = require('./devConfig');
 const md5 = require('md5');
+const uuid = require('uuid/v4');
 const querystring = require('querystring');
-const Decimal128 = require('mongodb').Decimal128;
+const path = require('path');
 
 module.exports = {
 
@@ -18,33 +19,48 @@ module.exports = {
 
 
 
-       let payOnlineUrl = 'https://secure.payonlinesystem.com/ru/payment/select/?';
+       let payOnlineUrl = 'https://www.paybox.kz/payment.php?';
 
-       let tempStr =
-
-
-           "MerchantId=" + config.MerchantId + "&" +
-
-           "OrderId=" + objParams._id.toString() + "&" +
-           "Amount=" + objParams.Amount.toString()+ "&" +
-           "Currency=" + "KZT" + "&" +
-
-           "OrderDescription=" + "Оплата за размещение рекламы на экране" + "&" +
+       let pg_salt = md5(uuid());
 
 
 
-           "PrivateSecurityKey=" + config.PrivateSecurityKey
+       let tempObj = {
+
+
+           pg_merchant_id: config.MerchantId,
+
+           pg_order_id: objParams._id.toString(),
+           pg_amount: objParams.Amount.toString(),
+           pg_currency: "KZT",
+
+           pg_description: "Оплата за услуги рекламы",
+
+
+           pg_testing_mode: 1,
+
+
+           secret_key: config.PrivateSecurityKey
+
+
+       };
 
 
 
 
-       ;
 
 
 
 
 
-     let SecurityKey = md5(tempStr);
+       let pg_sig = md5( "payment.php" + ";" + tempObj.pg_amount + ";" + tempObj.pg_currency + ";" +tempObj.pg_description +
+           ";" +  tempObj.pg_merchant_id + ";" + tempObj.pg_order_id + ";" + pg_salt + ";" + tempObj.pg_testing_mode + ";" + tempObj.secret_key);
+
+
+
+
+
+
 
 
 
@@ -52,20 +68,19 @@ module.exports = {
        let finalStr = querystring.stringify({
 
 
-           MerchantId: config.MerchantId,
 
-           OrderId: objParams._id.toString(),
-           Amount: objParams.Amount.toString(),
-           Currency: "KZT",
+           pg_merchant_id: config.MerchantId,
 
-           OrderDescription: "Оплата за размещение рекламы на экране",
+           pg_order_id: objParams._id.toString(),
+           pg_amount: objParams.Amount.toString(),
+           pg_currency: "KZT",
 
-           SecurityKey: SecurityKey,
+           pg_description: "Оплата за услуги рекламы",
+           pg_testing_mode: 1,
 
-           userIdWhoPayOrder: objParams.userIdWhoPayOrder.toString(),
-           userId: objParams.userId.toString(),
-           videoSchedullingId: objParams.videoSchedullingId.toString()
 
+           pg_salt: pg_salt,
+           pg_sig: pg_sig,
 
 
 
