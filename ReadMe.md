@@ -2,8 +2,7 @@
 [![NSP Status](https://nodesecurity.io/orgs/efflife/projects/9c08c8c5-dbcd-42fb-bf44-9061654b6ddb/badge)](https://nodesecurity.io/orgs/efflife/projects/9c08c8c5-dbcd-42fb-bf44-9061654b6ddb)
 
 
-<a href="https://snyk.io/test/github/simvolice/adsme2"><img src="https://snyk.io/test/github/simvolice/adsme2/badge.svg" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/simvolice/adsme2" style="max-width:100%;"></a>
-
+[![Known Vulnerabilities](https://snyk.io/test/github/simvolice/adsme2/badge.svg)](https://snyk.io/test/github/simvolice/adsme2)
 
 
 [Документаци на API](https://github.com/simvolice/adsme2/wiki)
