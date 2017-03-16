@@ -28,8 +28,17 @@ function getRandomInt(min, max) {
 }
 
 
-
-
+/**
+ * Нарезать постер с видео
+ * @param pathToFile
+ * @param pathToOutPng
+ * @param originalFileName
+ * @param nameOfMpdDir
+ * @param nameOfMpdFileForDB
+ * @param lengthVideoInSecond
+ * @param req
+ * @param res
+ */
 function createPoster(pathToFile, pathToOutPng, originalFileName, nameOfMpdDir, nameOfMpdFileForDB, lengthVideoInSecond, req, res) {
 
 
@@ -324,7 +333,12 @@ function returnHeightVideo(arrStreams) {
 
 }
 
-
+/**
+ * Проверка только на высоту кадра
+ * @param heightOfVideo
+ * @param res
+ * @return {*}
+ */
 function checkOnliHeightVideo(heightOfVideo, res) {
     if (heightOfVideo >= 360) {
 
@@ -346,7 +360,12 @@ function checkOnliHeightVideo(heightOfVideo, res) {
 }
 
 
-
+/**
+ * Проверка только на формат видео
+ * @param tempObjForResult
+ * @param res
+ * @return {*}
+ */
 function checkOnlyFormatOfVideo(tempObjForResult, res) {
 
 

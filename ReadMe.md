@@ -1,4 +1,7 @@
 
+[![NSP Status](https://nodesecurity.io/orgs/efflife/projects/9c08c8c5-dbcd-42fb-bf44-9061654b6ddb/badge)](https://nodesecurity.io/orgs/efflife/projects/9c08c8c5-dbcd-42fb-bf44-9061654b6ddb)
+
+
 <a href="https://snyk.io/test/github/simvolice/adsme2"><img src="https://snyk.io/test/github/simvolice/adsme2/badge.svg" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/simvolice/adsme2" style="max-width:100%;"></a>
 
 
@@ -18,7 +21,7 @@
 
 
 # Мы поддерживаем следующую высоту кадра в каждом видео:
-### От 720p и выше.
+### От 360p и выше.
 
 
 # Мы поддерживаем объем не более 100Мб
