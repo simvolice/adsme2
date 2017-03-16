@@ -28,11 +28,42 @@ module.exports = {
 
 
 
+
+
+
             // Get the collection
             const col = db.collection('users');
             const colVideo = db.collection('video');
 
             const colSchedulling = db.collection('schedulling');
+
+            const colNotif = db.collection('notification');
+
+            const resultForNotif = await col.findOne({_id: ObjectId(objParams.userId)});
+
+            objParams.nameOfFromCompany = resultForNotif.nameOfCompany;
+
+
+
+
+          await colNotif.insertOne({
+
+                userId: ObjectId(objParams.userIdScreenHolder),
+
+                messageOfNotification: objParams.messageOfNotification,
+                linkPay: objParams.linkPay,
+                dateOfNotification: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) ),
+                nameOfFromCompany: objParams.nameOfFromCompany,
+                statusRead: false
+
+
+
+            });
+
+
+
+
+
 
 
 

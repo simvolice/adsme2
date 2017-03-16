@@ -39,7 +39,7 @@ module.exports = {
 
            pg_testing_mode: 1,
 
-
+           pg_user_contact_email: objParams.email,
            secret_key: config.PrivateSecurityKey
 
 
@@ -54,7 +54,7 @@ module.exports = {
 
 
        let pg_sig = md5( "payment.php" + ";" + tempObj.pg_amount + ";" + tempObj.pg_currency + ";" +tempObj.pg_description +
-           ";" +  tempObj.pg_merchant_id + ";" + tempObj.pg_order_id + ";" + pg_salt + ";" + tempObj.pg_testing_mode + ";" + tempObj.secret_key);
+           ";" +  tempObj.pg_merchant_id + ";" + tempObj.pg_order_id + ";" + pg_salt + ";" + tempObj.pg_testing_mode + ";" + tempObj.pg_user_contact_email + ";" +tempObj.secret_key);
 
 
 
@@ -77,7 +77,7 @@ module.exports = {
 
            pg_description: "Оплата за услуги рекламы",
            pg_testing_mode: 1,
-
+           pg_user_contact_email: objParams.email,
 
            pg_salt: pg_salt,
            pg_sig: pg_sig,

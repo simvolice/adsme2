@@ -6,10 +6,9 @@ const router = express.Router();
 const SchedullingService = require('../services/SchedullingService');
 const config = require('../utils/devConfig');
 const jsonwebtoken = require('jsonwebtoken');
-const OrderService = require('../services/OrderService');
-const NotificationService = require('../services/NotificationService');
-const createOrderLink = require('../utils/createOrderLink');
-const UsersService = require('../services/UsersService');
+
+
+
 const AmountService = require('../services/AmountService');
 
 
@@ -52,7 +51,7 @@ router.post('/setnewvideotoscheduling', function(req, res, next){
     let objParams = {
 
        userIdScreenHolder: req.body.userId,
-        idUserToNotification: req.body.userId,
+
        videoId: req.body.videoId,
         dateOfShowVideo: req.body.dateOfShowVideo,
        userId : jsonwebtoken.verify(req.body.sessionToken, config.SECRETJSONWEBTOKEN),
@@ -62,20 +61,6 @@ router.post('/setnewvideotoscheduling', function(req, res, next){
 
 
     };
-
-
-    UsersService.findOneUser(objParams.userId).then(function (result) {
-
-        objParams.nameOfFromCompany = result.nameOfCompany;
-
-        NotificationService.addNotification(objParams);
-
-
-
-    });
-
-
-
 
 
     AmountService.getTotalSum(objParams).then(function (result) {
@@ -151,44 +136,12 @@ router.post('/deleteoneschedullingvideo', function(req, res, next){
 
 
 
-function createLinkForPay(objParams) {
-
-
-    OrderService.createOrder(objParams).then(function (result) {
-
-
-        let objParamsNotif = {
-
-            nameOfFromCompany: objParams.nameOfCompany,
-            messageOfNotification: "Вам необходимо оплатить заказ, чтобы это сделать пройдите по следующей ссылке: ",
-
-            linkPay: createOrderLink.newLink(result.ops[0]),
-            idUserToNotification: objParams.userIdWhoPayOrder
-
-
-        };
-
-
-        console.log("\x1b[41m", objParamsNotif.linkPay);
-
-
-        NotificationService.addNotification(objParamsNotif);
 
 
 
-    });
-
-
-
-
-}
-
-
-
-
-
-
-
+/**
+ * Когда нажимаем на галочку утверждения
+ */
 router.post('/enableoneschedullingvideo', function(req, res, next){
 
 
@@ -205,49 +158,13 @@ router.post('/enableoneschedullingvideo', function(req, res, next){
 
     };
 
-    UsersService.findOneUser(objParams.userId).then(function (result) {
-
-        objParams.nameOfCompany = result.nameOfCompany;
-
-
-    });
-
-
-    SchedullingService.getOneSchedullingVideo(objParams).then(function (result) {
-
-
-
-        objParams.Amount = result.amountResult.toString();
-
-    });
-
-
-
 
 
     SchedullingService.setEnableVideoInSchedulling(objParams).then(function (result) {
 
-        createLinkForPay(objParams);
-
-        res.json({"code": "ok"});
 
 
-        /*if (result.result.nModified == 1) {
-
-
-
-
-
-        } else {
-
-            res.json({"code": "thisVideoYetEnable"});
-
-
-
-        }*/
-
-
-
+       res.json({"code": "ok", "resultFromDb": result});
 
 
     });

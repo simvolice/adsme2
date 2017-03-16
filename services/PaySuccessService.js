@@ -31,9 +31,45 @@ module.exports = {
 
             // Get the collection
             const col = db.collection('paysuccess');
+            const colOrders = db.collection('orders');
+            const colUsers = db.collection('users');
+            const colNotif = db.collection('notification');
+
+            const colSchedulling = db.collection('schedulling');
+
+
+
+
+
+            const resultOrders = await colOrders.findOne({_id: ObjectId(objParams.pg_order_id)});
+            const resultUsers = await colUsers.findOne({_id: ObjectId(resultOrders.userIdWhoPayOrder)});
+
+
 
 
             objParams.createAt = new Date( new Date().getTime() -  ( new Date().getTimezoneOffset() * 60000 ) );
+
+
+
+
+            await colNotif.insertOne({
+
+                userId: ObjectId(resultOrders.userId),
+
+                messageOfNotification: "Добрый день, я успешно оплатил свой заказ, поэтому не забудьте запустить мою рекламу",
+
+                dateOfNotification: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) ),
+                nameOfFromCompany: resultUsers.nameOfCompany,
+                statusRead: false
+
+
+
+            });
+
+
+
+            await colSchedulling.updateOne({_id: ObjectId(resultOrders.videoSchedullingId), userId: ObjectId(resultOrders.userId)}, {$set: {statusOfPayment: true}});
+
 
 
             const result = await col.insertOne(objParams);

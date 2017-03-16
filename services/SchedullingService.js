@@ -8,8 +8,8 @@ const NotificationService = require('../services/NotificationService');
 
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
-const Int32 = require('mongodb').Int32;
-
+const Decimal128 = require('mongodb').Decimal128;
+const createOrderLink = require('../utils/createOrderLink');
 const Logger = require('mongodb').Logger;
 Logger.setLevel('debug');
 
@@ -120,38 +120,7 @@ module.exports = {
 
 
 
-    getOneSchedullingVideo: async function (objParams) {
 
-// Connection URL
-        const db = await MongoClient.connect(config.urlToMongoDBLinode);
-
-        try {
-
-
-
-
-            // Get the collection
-            const col = db.collection('schedulling');
-
-            const result = await col.findOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)});
-
-
-
-            db.close();
-
-            return result;
-
-
-        }catch(err) {
-            db.close();
-            return err;
-
-
-        }
-
-
-
-    },
 
 
     getallvideoforscreenholder: async function (userId) {
@@ -304,6 +273,79 @@ module.exports = {
 
             // Get the collection
             const col = db.collection('schedulling');
+            const colUsers = db.collection('users');
+            const colOrders = db.collection('orders');
+
+            const colNotif = db.collection('notification');
+
+
+
+
+
+
+
+            const resultUsers = await colUsers.findOne({_id: ObjectId(objParams.userId)});
+            const resultUserIdWhoPayOrder = await colUsers.findOne({_id: ObjectId(objParams.userIdWhoPayOrder)});
+
+
+
+
+            objParams.nameOfCompany = resultUsers.nameOfCompany;
+
+
+
+
+            const resultAmount = await col.findOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)});
+
+            objParams.Amount = resultAmount.amountResult.toString();
+
+
+
+
+
+
+
+
+
+
+             const resultFromOrder = await colOrders.insertOne({
+
+                    videoSchedullingId: ObjectId(objParams.videoSchedullingId),
+                    userId: ObjectId(objParams.userId),
+                    userIdWhoPayOrder: ObjectId(objParams.userIdWhoPayOrder),
+                    Amount:  Decimal128.fromString(objParams.Amount)
+
+
+
+                });
+
+
+
+             objParams._id = resultFromOrder.ops[0]._id;
+             objParams.email = resultUserIdWhoPayOrder.email;
+
+
+
+
+
+
+
+            await colNotif.insertOne({
+
+                userId: ObjectId(objParams.userIdWhoPayOrder),
+
+                messageOfNotification: "Вам необходимо оплатить заказ, чтобы это сделать пройдите по следующей ссылке: ",
+                linkPay: createOrderLink.newLink(objParams),
+                dateOfNotification: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) ),
+                nameOfFromCompany: objParams.nameOfCompany,
+                statusRead: false
+
+
+
+            });
+
+
+
 
             const result = await col.updateOne({_id: ObjectId(objParams.videoSchedullingId), userId: ObjectId(objParams.userId)}, {$set: {statusOfEnableVideo: true}});
 
