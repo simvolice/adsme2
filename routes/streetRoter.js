@@ -22,8 +22,6 @@ router.post('/getstreets', function(req, res, next){
     res.json({"code": "ok", "resultFromDb": StreetsAstana});
 
 
-    StreetsAstana = [];
-
 
 });
 
