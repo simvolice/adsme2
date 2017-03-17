@@ -29,6 +29,9 @@ module.exports = {
 
 
 
+
+
+
             // Get the collection
             const col = db.collection('paysuccess');
             const colOrders = db.collection('orders');
@@ -43,9 +46,14 @@ module.exports = {
 
             const resultOrders = await colOrders.findOne({_id: ObjectId(objParams.pg_order_id)});
             const resultUsers = await colUsers.findOne({_id: ObjectId(resultOrders.userIdWhoPayOrder)});
+            const resultUsersScreenHolder = await colUsers.findOne({_id: ObjectId(resultOrders.userId)});
 
 
-            await colUsers.updateOne({_id: ObjectId(resultOrders.userId)}, {$inc: {incomeMoney: resultOrders.Amount}});
+
+
+            let resultForReverseCost = (resultOrders.Amount / resultUsersScreenHolder.totalCost) * resultUsersScreenHolder.costOfSecond;
+
+            await colUsers.updateOne({_id: ObjectId(resultOrders.userId)}, {$inc: {incomeMoney: resultForReverseCost}});
 
 
 
