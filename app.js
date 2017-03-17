@@ -11,7 +11,6 @@ const cors = require('cors');//TODO В продакте обязательно �
 
 
 
-
 const app = express();
 
 
@@ -25,6 +24,8 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
 
 //TODO Потом надо добавить для кэша{"maxAge": "86400"}
 app.use(express.static(path.join(__dirname, 'public')));

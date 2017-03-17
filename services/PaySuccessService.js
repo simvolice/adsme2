@@ -4,7 +4,7 @@
 const config = require('../utils/devConfig');
 
 const MongoClient = require('mongodb').MongoClient;
-const Decimal128 = require('mongodb').Decimal128;
+
 const ObjectId = require('mongodb').ObjectId;
 
 const Logger = require('mongodb').Logger;
@@ -43,6 +43,9 @@ module.exports = {
 
             const resultOrders = await colOrders.findOne({_id: ObjectId(objParams.pg_order_id)});
             const resultUsers = await colUsers.findOne({_id: ObjectId(resultOrders.userIdWhoPayOrder)});
+
+
+            await colUsers.updateOne({_id: ObjectId(resultOrders.userId)}, {$inc: {incomeMoney: resultOrders.Amount}});
 
 
 
