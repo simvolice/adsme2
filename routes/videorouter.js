@@ -60,7 +60,7 @@ function createPoster(pathToFile, pathToOutPng, originalFileName, nameOfMpdDir, 
 
     ffmpeg.on('close', (code) => {
 
-        if (code == 0) {
+        if (code === 0) {
 
 
 
@@ -75,7 +75,7 @@ function createPoster(pathToFile, pathToOutPng, originalFileName, nameOfMpdDir, 
                 originalFileName: originalFileName,
                 mpdOutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '.mpd',
                 mp4OutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '_dashinit.mp4',
-                userId: jsonwebtoken.verify(req.get('sessionToken'), config.SECRETJSONWEBTOKEN)._id,
+                userId: jsonwebtoken.verify(req.get('sessionToken'), config.SECRETJSONWEBTOKEN),
                 lengthVideoInSecond: lengthVideoInSecond,
                 linkToPoster: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + path.parse(outPutPngPoster).base,
 
@@ -148,7 +148,7 @@ function sendToPackager(pathToFile, res, originalFileName, req, lengthVideoInSec
 
     mp4Box.on('close', (code) => {
 
-        if (code == 0) {
+        if (code === 0) {
 
 
 
@@ -211,7 +211,7 @@ function getLength(pathToFile, res, originalFileName, req) {
 
 
 
-        if (code == false) {
+        if (code === false) {
 
 
 
@@ -276,7 +276,7 @@ function sendToConvert(pathToFile, res, req, originalFileName) {
 
     ffmpeg.on('close', (code) => {
 
-        if (code == 0) {
+        if (code === 0) {
 
 
             //Удаляем загруженный файл с клиента
@@ -372,7 +372,7 @@ function checkOnlyFormatOfVideo(tempObjForResult, res) {
 
     let ArrFormatsVideo = ['mov,mp4,m4a,3gp,3g2,mj2', 'avi', 'asf', 'flv', 'matroska,webm', 'mpeg'];
 
-    if (Object.keys(tempObjForResult).length == 0) {
+    if (Object.keys(tempObjForResult).length === 0) {
 
 
 
@@ -430,7 +430,7 @@ function checkHeightAndFormatOfFiles(pathToFile, res) {
 
 
 
-        if (code == false) {
+        if (code === false) {
 
 
 
@@ -491,13 +491,13 @@ function uploadFile(req, res, sizeFile) {
 
     busboy.on('finish', function() {
 
-        if (req.get('sizeFile') == 'partFile') {
+        if (req.get('sizeFile') === 'partFile') {
 
             checkHeightAndFormatOfFiles(saveTo, res);
 
 
 
-        } else if (req.get('sizeFile') == 'fullFile'){
+        } else if (req.get('sizeFile') === 'fullFile'){
 
 
             sendToConvert(saveTo, res, req, originalFileName);
@@ -542,7 +542,7 @@ router.post('/addvideo', function(req, res, next){
         res.json({"code": "lengthVideoError"});
 
 
-    } else if (req.get('sizeFile') == 'partFile'){
+    } else if (req.get('sizeFile') === 'partFile'){
 
 
 
@@ -553,7 +553,7 @@ router.post('/addvideo', function(req, res, next){
 
 
 
-    } else if (req.get('sizeFile') == 'fullFile'){
+    } else if (req.get('sizeFile') === 'fullFile'){
 
 
         uploadFile(req, res, lengthMaxVideo);

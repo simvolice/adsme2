@@ -6,7 +6,7 @@ const os = require('os');
 
 
 
-if (process.env.DEPLOY == 'dev') {
+if (process.env.DEPLOY === 'dev') {
 
 
 
@@ -16,7 +16,7 @@ if (process.env.DEPLOY == 'dev') {
 
 
         port: 3000,
-        smtpServer: "smtp://simvolice%40gmail.com:c34e5febd2a6440aae8978ea386a4b54@smtp.gmail.com",
+        smtpServer: "smtp://simvolice%40gmail.com:1ea7ab3a09c4dc5aaea0026ff82a4c857b968ab8a1a815095ebd4d9ec9dc5c46@smtp.gmail.com",
         urlToMongoDBLinode: "mongodb://admin:1989aaaAAA@139.162.167.222:27017/adsme",
         SECRETJSONWEBTOKEN: "5df9ed11-2bc3-4a2e-a4fc-780c271b25ac",
 
@@ -46,13 +46,13 @@ if (process.env.DEPLOY == 'dev') {
 
 
 
-} else if (process.env.DEPLOY == 'prod'){
+} else if (process.env.DEPLOY === 'prod'){
 
 
     module.exports = {
 
         port: 3010,
-        smtpServer: "smtp://simvolice%40gmail.com:c34e5febd2a6440aae8978ea386a4b54@smtp.gmail.com",
+        smtpServer: "smtp://simvolice%40gmail.com:1ea7ab3a09c4dc5aaea0026ff82a4c857b968ab8a1a815095ebd4d9ec9dc5c46@smtp.gmail.com",
         urlToMongoDBLinode: "mongodb://admin:1989aaaAAA@127.0.0.1:27017/adsme",
         SECRETJSONWEBTOKEN: "5df9ed11-2bc3-4a2e-a4fc-780c271b25ac",
 
