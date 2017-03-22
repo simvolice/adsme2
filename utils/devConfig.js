@@ -35,7 +35,8 @@ if (process.env.DEPLOY === 'dev') {
 
 
         MerchantId: '500136',
-        PrivateSecurityKey: '9tegSggXIbdiJkMi'
+        PrivateSecurityKey: '9tegSggXIbdiJkMi',
+        PrivateKeySendMoney: 'ELhoByUKt8u0Yloj'
 
 
 
@@ -70,7 +71,8 @@ if (process.env.DEPLOY === 'dev') {
 
 
         MerchantId: '500136',
-        PrivateSecurityKey: '9tegSggXIbdiJkMi'
+        PrivateSecurityKey: '9tegSggXIbdiJkMi',
+        PrivateKeySendMoney: 'ELhoByUKt8u0Yloj'
 
 
 
