@@ -136,12 +136,6 @@ module.exports = {
 
 
 
-
-
-
-
-
-
     let pg_sig = md5( "p2p2nonreg" + ";" + tempObj.pg_amount + ";" + tempObj.pg_currency + ";" +tempObj.pg_description +
         ";" +  tempObj.pg_merchant_id + ";" + tempObj.pg_order_id + ";" + tempObj.pg_payment_to + ";" + tempObj.pg_post_link + ";" + pg_salt + ";" + tempObj.pg_testing_mode + ";" + tempObj.secret_key);
 

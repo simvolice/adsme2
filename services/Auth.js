@@ -62,7 +62,7 @@ module.exports = {
                     totalCost: Decimal128.fromString(getPercent.percentage(objParams.costOfSecond || 0, 6.9)),
                     graphOfWork: objParams.graphOfWork,
 
-                    numberOfBankCard: objParams.numberOfBankCard,
+
                     incomeMoney: Decimal128.fromString('0.00')
 
 

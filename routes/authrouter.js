@@ -59,7 +59,7 @@ function checkRegisterData(req, res) {
             activateToken: activateToken,
             url: config.domainName + "/verifemail?token=" + activateToken,
             subject: "Активация почтового ящика",
-            from: "info@efflife.kz",
+            from: "support@adshot.kz",
             nameEmailTemplate: "activateEmail",
 
             role: req.body.role,
@@ -68,9 +68,9 @@ function checkRegisterData(req, res) {
 
 
             costOfSecond: req.body.costOfSecond,
-            graphOfWork: req.body.graphOfWork,
+            graphOfWork: req.body.graphOfWork
 
-            numberOfBankCard: req.body.numberOfBankCard,
+
 
 
 
@@ -370,7 +370,7 @@ router.post('/resetpass', function (req, res, next) {
 
                 url : config.domainName + "/veriftoken?token=" + result.activateToken,
                 subject: "Восстановление пароля",
-                from: "info@efflife.kz",
+                from: "support@adshot.kz",
                 nameEmailTemplate: "restorePass"
 
 

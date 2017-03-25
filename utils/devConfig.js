@@ -16,7 +16,7 @@ if (process.env.DEPLOY === 'dev') {
 
 
         port: 3000,
-        smtpServer: "smtp://simvolice%40gmail.com:1ea7ab3a09c4dc5aaea0026ff82a4c857b968ab8a1a815095ebd4d9ec9dc5c46@smtp.gmail.com",
+        smtpServer: "smtps://postmaster@mx.efflife.kz:14e25c814c385a93e651c940a9bf5900@smtp.mailgun.org:465",
         urlToMongoDBLinode: "mongodb://admin:1989aaaAAA@139.162.167.222:27017/adsme",
         SECRETJSONWEBTOKEN: "5df9ed11-2bc3-4a2e-a4fc-780c271b25ac",
 
@@ -53,7 +53,7 @@ if (process.env.DEPLOY === 'dev') {
     module.exports = {
 
         port: 3010,
-        smtpServer: "smtp://simvolice%40gmail.com:1ea7ab3a09c4dc5aaea0026ff82a4c857b968ab8a1a815095ebd4d9ec9dc5c46@smtp.gmail.com",
+        smtpServer: "smtps://postmaster@mx.efflife.kz:14e25c814c385a93e651c940a9bf5900@smtp.mailgun.org:465",
         urlToMongoDBLinode: "mongodb://admin:1989aaaAAA@127.0.0.1:27017/adsme",
         SECRETJSONWEBTOKEN: "5df9ed11-2bc3-4a2e-a4fc-780c271b25ac",
 
