@@ -414,7 +414,7 @@ router.get('/veriftoken', function (req, res, next) {
 
     AuthService.verifToken(req.query.token).then(function (result) {
 
-        res.redirect('/resetpass');
+        res.redirect('/main.html#/resetpass');
 
 
     })
