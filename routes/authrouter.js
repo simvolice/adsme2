@@ -84,8 +84,22 @@ function checkRegisterData(req, res) {
 
 
 
-                sendHtmlEmail.sendEmail(objParams);
-                res.json({"code": "ok", "resultFromDb": result});
+
+            if (result.code !== 11000) {
+
+
+              sendHtmlEmail.sendEmail(objParams);
+              res.json({"code": "ok", "resultFromDb": result});
+
+
+            } else {
+
+
+              res.json({"code": 1});
+
+
+            }
+
 
 
 
