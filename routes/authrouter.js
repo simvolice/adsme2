@@ -320,7 +320,7 @@ router.get('/verifemail', function (req, res, next) {
 
 
 
-        res.redirect('/login');
+        res.redirect('/main.html#/login');
 
 
     });
