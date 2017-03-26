@@ -93,5 +93,4 @@ jspm_packages
 
 
 .idea/
-public/mpddirectory/
-public/static/
+/public/
