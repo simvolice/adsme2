@@ -11,6 +11,7 @@ module.exports = function (app) {
     app.use('/', require('./onairRouter'));
     app.use('/', require('./payRouter'));
     app.use('/', require('./streetRoter'));
+    app.use('/', require('./debugRouter'));
 
 
 };
