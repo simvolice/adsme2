@@ -45,69 +45,77 @@ module.exports = {
 
 
 
+        const resFromSchedulling = await colSchedulling.findOne({videoId: ObjectId(objParams.videoId), dateOfShowVideo: new Date(objParams.dateOfShowVideo), userId: ObjectId(objParams.userIdScreenHolder)});
+
+
+
+        if (resFromSchedulling === null) {
+
 
           await colNotif.insertOne({
 
-                userId: ObjectId(objParams.userIdScreenHolder),
+            userId: ObjectId(objParams.userIdScreenHolder),
 
-                messageOfNotification: objParams.messageOfNotification,
-                linkPay: objParams.linkPay,
-                dateOfNotification: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) ),
-                nameOfFromCompany: objParams.nameOfFromCompany,
-                statusRead: false
+            messageOfNotification: objParams.messageOfNotification,
 
-
-
-            });
+            dateOfNotification: new Date(new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 )),
+            nameOfFromCompany: objParams.nameOfFromCompany,
+            statusRead: false
 
 
+          });
 
 
+          const result = await col.findOne({_id: ObjectId(objParams.userIdScreenHolder)});
 
 
+          const resultVideo = await colVideo.findOne({
+            _id: ObjectId(objParams.videoId),
+            userId: ObjectId(objParams.userId)
+          });
 
 
-            const result = await col.findOne({_id: ObjectId(objParams.userIdScreenHolder)});
+          let AmountResult = (result.totalCost.toString() * resultVideo.lengthVideoInSecond).toFixed(2);
 
 
-            const resultVideo = await colVideo.findOne({_id: ObjectId(objParams.videoId), userId: ObjectId(objParams.userId) });
+          await colSchedulling.insertOne({
+
+            userId: ObjectId(objParams.userIdScreenHolder),
+            videoId: ObjectId(objParams.videoId),
+            dateOfShowVideo: new Date(objParams.dateOfShowVideo),
+
+            statusOfEnableVideo: false,
+            statusOfPayment: false,
+            statusOfPlayToEnd: Int32(0),
+            amountResult: Decimal128.fromString(AmountResult)
 
 
-
-            let AmountResult = (result.totalCost.toString() * resultVideo.lengthVideoInSecond).toFixed(2);
-
+          });
 
 
-            await colSchedulling.insertOne({
-
-                userId: ObjectId(objParams.userIdScreenHolder),
-                videoId: ObjectId(objParams.videoId),
-                dateOfShowVideo: new Date(objParams.dateOfShowVideo),
-
-                statusOfEnableVideo: false,
-                statusOfPayment: false,
-                statusOfPlayToEnd: Int32(0),
-                amountResult: Decimal128.fromString(AmountResult)
+          db.close();
 
 
-
-
-
-            });
+          return parseFloat(AmountResult).toFixed();
 
 
 
 
 
-
-            db.close();
-
+        } else {
 
 
 
+          db.close();
 
-           return parseFloat(AmountResult).toFixed();
 
+
+
+          return 100;
+
+
+
+        }
 
         }catch(err) {
             db.close();
