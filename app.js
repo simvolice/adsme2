@@ -28,8 +28,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //TODO в продакте надо обязательно раскоментить
-/*app.use(helmet());
- app.use(helmet.noCache());*/
+/*app.use(helmet());*/
+app.use(helmet.noCache());
 
 
 require('./routes')(app);
