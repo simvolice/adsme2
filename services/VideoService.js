@@ -40,7 +40,8 @@ module.exports = {
                 userId: new ObjectId(objParams.userId),
                 createAt: new Date( new Date().getTime() - ( new Date().getTimezoneOffset() * 60000 ) ),
                 lengthVideoInSecond: Int32(objParams.lengthVideoInSecond),
-                linkToPoster: objParams.linkToPoster
+                linkToPoster: objParams.linkToPoster,
+                dirName: objParams.dirName
 
 
 
@@ -121,7 +122,7 @@ module.exports = {
             // Get the collection
             const col = db.collection('video');
 
-            const result = await col.deleteOne({_id: ObjectId(objParams.videoId), userId: ObjectId(objParams.userId)});
+            const result = await col.findOneAndDelete({_id: ObjectId(objParams.videoId), userId: ObjectId(objParams.userId)});
 
 
 

@@ -8,6 +8,7 @@ const os = require('os');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
+const rimraf = require('rimraf');
 const config = require('../utils/devConfig');
 
 
@@ -68,6 +69,7 @@ function createPoster(pathToFile, pathToOutPng, originalFileName, nameOfMpdDir, 
         lengthVideoInSecond: lengthVideoInSecond,
         linkToPoster: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + path.parse(outPutPngPoster).base,
 
+        dirName: nameOfMpdDir
 
       };
 
@@ -482,6 +484,11 @@ router.post('/deleteonevideo', function (req, res, next) {
   };
 
   VideoService.deleteOneVideo(objParams).then(function (result) {
+
+
+
+
+    rimraf.sync(config.pathToMPD + path.sep + result.value.dirName);
 
     res.json({"code": "ok", "resultFromDb": result});
 
