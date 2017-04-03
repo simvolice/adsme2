@@ -8,7 +8,7 @@ const os = require('os');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
-const rimraf = require('rimraf');
+const fsExtra = require('fs-extra');
 const config = require('../utils/devConfig');
 
 
@@ -56,15 +56,14 @@ function createPoster(pathToFile, pathToOutPng, originalFileName, nameOfMpdDir, 
 
 
 
-      //Удаляем сконвертированный файл
-      fs.unlinkSync(pathToFile);
 
+      fsExtra.moveSync(pathToFile, config.pathToMPD + path.sep + nameOfMpdDir + path.sep + nameOfMpdFileForDB + '.mp4');
 
       let objParams = {
 
         originalFileName: originalFileName,
         mpdOutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '.mpd',
-        mp4OutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '_dashinit.mp4',
+        mp4OutputFile: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + nameOfMpdFileForDB + '.mp4',
         userId: jsonwebtoken.verify(req.get('sessionToken'), config.SECRETJSONWEBTOKEN),
         lengthVideoInSecond: lengthVideoInSecond,
         linkToPoster: config.domainName + '/mpddirectory/' + nameOfMpdDir + '/' + path.parse(outPutPngPoster).base,
@@ -488,7 +487,7 @@ router.post('/deleteonevideo', function (req, res, next) {
 
 
 
-    rimraf.sync(config.pathToMPD + path.sep + result.value.dirName);
+    fsExtra.removeSync(config.pathToMPD + path.sep + result.value.dirName);
 
     res.json({"code": "ok", "resultFromDb": result});
 
