@@ -12,6 +12,15 @@ const cors = require('cors');//TODO В продакте обязательно �
 
 const app = express();
 
+app.use(helmet());
+app.use(helmet.noCache());
+app.use(helmet.referrerPolicy());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    styleSrc: ["'self'"]
+  }
+}));
 
 //TODO В продакте обязательно удалить
 cors({credentials: true, origin: true});
@@ -24,12 +33,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-//TODO Потом надо добавить для кэша{"maxAge": "86400"}
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-//TODO в продакте надо обязательно раскоментить
-/*app.use(helmet());*/
-app.use(helmet.noCache());
+
+
+
+
 
 
 require('./routes')(app);

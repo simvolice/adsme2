@@ -48,6 +48,8 @@ function checkRegisterData(req, res) {
 
 
 
+
+
         const hash = bcrypt.hashSync(req.body.pass, 10);
 
         let activateToken = uuidV4();
@@ -76,7 +78,11 @@ function checkRegisterData(req, res) {
 
         };
 
+      AuthService.saveCsrfToken(uuidV4()).then(function (result) {
 
+        objParams.url += "&tokenCSRF=" + result.ops[0].tokencsrf;
+
+      });
 
 
 
@@ -160,17 +166,10 @@ router.use(function (req, res, next) {
 
 
 
-
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, tokenCSRF, sessionToken, sizeFile");
-
-
-
     console.log("\x1b[42m", req.body);
 
 
-    if (req.method == "GET") {
+    if (req.originalUrl === "/gettokencsrf") {
 
 
         next();
@@ -180,6 +179,9 @@ router.use(function (req, res, next) {
 
 
         let tokenFromClient = req.body.tokenCSRF || req.get('tokenCSRF') || req.query.tokenCSRF;
+
+
+
 
 
         AuthService.getCsrfToken(tokenFromClient).then(function (result) {
