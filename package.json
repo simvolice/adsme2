@@ -15,7 +15,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.0",
     "body-parser": "~1.18.2",
-    "busboy": "^0.2.14",
+    "busboy": "^1.0.0",
     "cors": "^2.8.1",
     "debug": "~2.6.7",
     "express": "^4.14.0",
@@ -25,8 +25,8 @@
     "md5": "^2.2.1",
     "mongodb": "^2.2.16",
     "morgan": "~1.9.0",
-    "nodemailer": "^2.7.0",
-    "nodemailer-express-handlebars": "^2.0.0",
+    "nodemailer": "^3.0.0",
+    "nodemailer-express-handlebars": "^6.1.0",
     "serve-favicon": "~2.4.3",
     "snyk": "^1.24.6",
     "uuid": "^3.0.1"
